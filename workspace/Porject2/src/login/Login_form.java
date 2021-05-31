@@ -1,4 +1,4 @@
-package main;
+package login;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
