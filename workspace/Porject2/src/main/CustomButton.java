@@ -2,11 +2,11 @@ package main;
 
 import javax.swing.JButton;
 
-public class Main_Button extends JButton{
-	private int id;
+public class CustomButton extends JButton{
+private int id;
 	
-	public Main_Button(String title) {
-		super(title);
+	public CustomButton(String top) {
+		super(top);
 	}
 
 	public int getId() {
@@ -16,5 +16,4 @@ public class Main_Button extends JButton{
 	public void setId(int id) {
 		this.id = id;
 	}
-	
 }
