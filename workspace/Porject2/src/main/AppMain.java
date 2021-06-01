@@ -45,7 +45,7 @@ public class AppMain extends JFrame{
 		
 		p_west.setPreferredSize(new Dimension(240, 800));
 		p_west.setBackground(Color.BLACK);
-		p_top.setPreferredSize(new Dimension(110, 800));
+		p_top.setPreferredSize(new Dimension(120, 800));
 		p_top.setBackground(Color.DARK_GRAY);
 		p_sub.setPreferredSize(new Dimension(110, 800));
 		p_sub.setBackground(Color.GRAY);
