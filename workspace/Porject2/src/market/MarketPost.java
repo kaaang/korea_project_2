@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -172,17 +173,23 @@ public class MarketPost extends Page{
 		public void actionPerformed(ActionEvent e) {
 			// 유효성 체크
 			Integer.parseInt(t_price.getText());
-			regist();
+			if(JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")){
+				regist();
+  			}
 		}
 	});
       bt_edit.addActionListener(new ActionListener() {
   		public void actionPerformed(ActionEvent e) {
-  			edit();
+  			if(JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "수정 하시겠습니까?")){
+  				edit();
+  			}
   		}
   	});
       bt_del.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			delete();
+    			if(JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "삭제 하시겠습니까?")){
+    				delete();      				
+      			}
     		}
     	});
       
@@ -190,39 +197,10 @@ public class MarketPost extends Page{
    // -------------------------------------------------------------------[메소드]
    // 상품 등록
    public void regist() {
-	   /* DB는 지금 연결 못함. AppMain에서 일괄 처리 필요하므로 대충 적어두고 주석 처리
-	   PreparedStatement pstmt= null;
-	   String sql= "insert into usermarket(title, price, content, filename) values(?,?,?,?)";
-	   try {
-		pstmt= this.getAppMain().getCon().prepareStatement(sql);
-		
-		// 바인드 변수 처리
-		 pstmt.setString(1, t_title.getText()); // 제목
-		 pstmt.setInt(2, Integer.parseInt(t_price.getText()); // 가격(무조건 숫자만 가능하게 유효성 처리)
-		 pstmt.setString(3, t_detail.getText()); // 상세 내용
-		 pstmt.setString(4, filename); // 이미지 명
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	*/
+	   
    }
    public void edit() {
-	   /* DB는 지금 연결 못함. AppMain에서 일괄 처리 필요하므로 대충 적어두고 주석 처리 */
-	   PreparedStatement pstmt= null;
-	   String sql= "update usermarket set title=?, price=?, content=?, filename=?";
-	   try {
-		pstmt= this.getAppMain().getCon().prepareStatement(sql);
-		
-		// 바인드 변수 처리
-		 pstmt.setString(1, t_title.getText()); // 제목
-		 pstmt.setInt(2, Integer.parseInt(t_price.getText()); // 가격(무조건 숫자만 가능하게 유효성 처리)
-		 pstmt.setString(3, t_detail.getText()); // 상세 내용
-		 pstmt.setString(4, filename); // 이미지 명
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+
 	
    }
 }
