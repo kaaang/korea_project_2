@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 public class JoinForm extends JPanel{
 	JPanel nul;
+	JPanel nul2;
 	JLabel l_id;
 	JLabel l_pass;
 	JLabel l_name;
@@ -40,6 +41,7 @@ public class JoinForm extends JPanel{
 	
 	public JoinForm() {
 		nul = new JPanel();
+		nul2 = new JPanel();
 		
 		l_id = new JLabel("ID");
 		l_pass = new JLabel("PASS");
@@ -58,8 +60,8 @@ public class JoinForm extends JPanel{
 		t_ymd = new JTextField(20);
 		t_nick = new JTextField(20);
 		
-		join = new JButton();
-		cancel = new JButton();
+		join = new JButton("회원가입");
+		cancel = new JButton("취소");
 		
 		
 	
@@ -73,8 +75,13 @@ public class JoinForm extends JPanel{
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		l_nick.setPreferredSize(new Dimension(100, 30));
 		
+		join.setPreferredSize(new Dimension(130, 40));
+		cancel.setPreferredSize(new Dimension(130, 40));
+		
 		nul.setPreferredSize(new Dimension(380,200));
 		nul.setBackground(Color.gray);
+		nul2.setPreferredSize(new Dimension(380,200));
+		nul2.setBackground(Color.gray);
 		
 		
 		
@@ -104,6 +111,10 @@ public class JoinForm extends JPanel{
 		add(l_nick);
 		add(t_nick);
 		
+		add(nul2);
+		
+		add(join);
+		add(cancel);
 		
 		
 		setVisible(false);

@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import main.AppMain;
+
 public class MainForm extends JFrame{
 
 	JPanel p_west;
@@ -23,18 +25,43 @@ public class MainForm extends JFrame{
 	LoginForm login;
 	JoinForm join;
 	
+	AppMain appMain;
+	
 	
 	public MainForm() {
 		p_west = new JPanel();
 		p_center = new JPanel();
 		login = new LoginForm();
 		join = new JoinForm();
+		appMain = new AppMain();
 		
-		login.join.addActionListener(new ActionListener() {
+		
+		
+		
+		login.login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				join();
+				System.out.println("로그인 정보 확인");
+				appMain.setVisible(true);
+				MainForm.this.setVisible(false);
 			}
 		});
+		login.join.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showJoin();
+			}
+		});
+		join.join.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("회원가입 정보 저장");
+				showLogin();
+			}
+		});
+		join.cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showLogin();				
+			}
+		});
+		
 		
 		p_west.setPreferredSize(new Dimension(1000, 800));
 		p_west.setBackground(Color.DARK_GRAY);
@@ -58,9 +85,15 @@ public class MainForm extends JFrame{
 		setResizable(false);
 	}
 	
-	public void join() {
+	public void showJoin() {
 		login.setVisible(false);
 		join.setVisible(true);
+		p_center.updateUI();
+		
+	}
+	public void showLogin() {
+		login.setVisible(true);
+		join.setVisible(false);
 		p_center.updateUI();
 		
 	}

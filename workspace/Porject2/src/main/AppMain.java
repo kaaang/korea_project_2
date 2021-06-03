@@ -130,7 +130,7 @@ public class AppMain extends JFrame implements ActionListener{
 
 		setSize(1400, 800);
 		setLocationRelativeTo(null);
-		setVisible(true);
+		setVisible(false);
 		setTitle("Riding Mate");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -165,8 +165,6 @@ public class AppMain extends JFrame implements ActionListener{
 		}
 	}
 	
-	public static void main(String[] args) {
-		new AppMain();
-	}
+	
 
 }
