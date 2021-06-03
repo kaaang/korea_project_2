@@ -13,6 +13,10 @@ public class Page extends JPanel{
 
 	public void setAppMain(AppMain appMain) {
 		this.appMain = appMain;
+		
+	}
+	public Page(AppMain appMain) {
+		this.appMain = appMain;
 		setPreferredSize(new Dimension(1160, 800));
 		setVisible(false);
 	}

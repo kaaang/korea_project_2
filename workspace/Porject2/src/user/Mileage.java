@@ -3,9 +3,8 @@ package user;
 import main.AppMain;
 import main.Page;
 
-public class User extends Page{
-	
-	public User(AppMain appMain) {
+public class Mileage extends Page{
+	public Mileage(AppMain appMain) {
 		super(appMain);
 	}
 }

@@ -22,146 +22,146 @@ import main.AppMain;
 import main.Page;
 
 public class MarketPost extends Page{
-	// ì„œìª½
-	JPanel p_west;
-	JButton bt_regist;
-	JTextField t_title;
-	JTextField t_price;
-	JTextArea t_detail;
-	JScrollPane scroll;
-	JButton bt_web;
-	JButton bt_file;
-	Canvas can;
-	JButton bt_edit;
-	JButton bt_del;
-	
-	// ì„¼í„°
-	JPanel p_center;
-	JPanel p_search; // ê²€ìƒ‰ ì»´í¬ë„ŒíŠ¸ ì˜¬ë ¤ë‘ëŠ” íŒ¨ë„
-	Choice ch_category; // ê²€ìƒ‰ ì¹´í…Œê³ ë¦¬
-	JTextField t_keyword; // ê²€ìƒ‰ì–´ì…ë ¥
-	JButton bt_search; 
-	
-	JTable table;
-	JScrollPane scroll_table;
-	// ìº”ë²„ìŠ¤ì˜ ì‚¬ì§„
-	Toolkit kit= Toolkit.getDefaultToolkit();
-	Image image;
-	JFileChooser chooser;
-	String filename; // ìœ ì €ì˜ ë³µì‚¬ì— ì˜í•´ ìƒì„±ëœ íŒŒì¼ëª…
-	// í…Œì´ë¸”
-	String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // ì»¬ëŸ¼ë°°ì—´
-	String[][] records= {};// ë ˆì½”ë“œ ë°°ì—´
-		
-	public MarketPost(AppMain appMain) {
-		this.setAppMain(appMain);
-		// -----------------------------------------------[ìƒì„±]
-		// ì„œìª½ ê´€ë ¨
-		p_west= new JPanel();
-		bt_regist= new JButton("ìƒí’ˆë“±ë¡");
-		t_title= new JTextField();
-		t_price= new JTextField();
-		t_detail= new JTextArea();
-		scroll= new  JScrollPane(t_detail);
-		bt_web= new JButton("ì›¹ì—ì„œ íŒŒì¼ ì°¾ê¸°");
-		bt_file= new JButton("ë‚´ ì»´í“¨í„°ì—ì„œ íŒŒì¼ ì°¾ê¸°");
-		
-		// ë‚´ë¶€ìµëª… í´ë˜ìŠ¤ëŠ” ì™¸ë¶€í´ë˜ìŠ¤ì˜ ë©¤ë²„ë³€ìˆ˜, ë©”ì†Œë“œë¥¼ ì ‘ê·¼ê°€ëŠ¥.
-		can= new Canvas() { // {}ë¶™ìœ¼ë©° extendsíš¨ê³¼
-			public void paint(Graphics g) {
-				g.drawImage(image, 0, 0, 180, 180, can);
-			}
-		};
-		bt_edit= new JButton("ìˆ˜ì •");
-		bt_del= new JButton("ì‚­ì œ");
-		
-		
-		// ì„¼í„°
-		p_center= new JPanel();
-		p_search= new JPanel();
-		
-		ch_category= new Choice();
-		// ê²€ìƒ‰ ì¹´í…Œê³ ë¦¬ ë“±ë¡
-		ch_category.add("ì„ íƒ");
-		ch_category.add("ì‘ì„±ì");
-		ch_category.add("ë‚´ìš©");
-		
-		t_keyword= new JTextField();
-		bt_search= new JButton("ê²€ìƒ‰");
-		
-		table= new JTable(new AbstractTableModel() {
-			public int getRowCount() {
-				return records.length;
-			}
-			public int getColumnCount() {
-				return columns.length;
-			}
-			// ì»¬ëŸ¼ ì œëª©
-			public String getColumnName(int col) {
-				return columns[col];
-			}
-			// ê° ì…€ì— ë“¤ì–´ê°ˆ ë°ì´í„°ë¥¼ ì´ì°¨ì› ë°°ì—´ë¡œë¶€í„° êµ¬í•¨
-			public Object getValueAt(int row, int col) {
-				return records[row][col];
-			}
-			// JTableì˜ ê° ì…€ì˜ ê°’ì„ ì§€ì •. ì…€ì„ í¸ì§‘í•œ í›„ ì—”í„°ì¹˜ëŠ” ìˆœê°„ ì•„ë˜ì˜ ë©”ì†Œë“œ í˜¸ì¶œ
-			public void setValueAt(Object val, int row, int col) {
-				records[row][col]=(String)val; 
-			}
-			
-			public boolean isCellEditable(int row, int col) {
-				if(col==0) { // ì²«ë²ˆì©¨ ì—´ì¸ product_idë§Œ ì½ê¸°ì „ìš©ìœ¼ë¡œ ì…‹íŒ…
-					return false;
-				}else {
-					return true;
-				}
-			}
-		});
-		
-		scroll_table= new JScrollPane(table);
-		// -----------------------------------------------[ìŠ¤íƒ€ì¼, ë ˆì´ì•„ì›ƒ]
-		// ê³µí†µí¬ê¸°
-		Dimension d= new Dimension(180, 30); 
-		setLayout(new BorderLayout());
-		
-		// ì„œìª½
-		p_west.setPreferredSize(new Dimension(200, 700));
-		scroll.setPreferredSize(new Dimension(180, 180));
-		can.setPreferredSize(new Dimension(180, 180));
-		can.setBackground(Color.DARK_GRAY);
-		
-		t_title.setPreferredSize(d);
-		t_price.setPreferredSize(d);
-		t_detail.setPreferredSize(d);
-		
-		// ì„¼í„°
-		p_center.setLayout(new BorderLayout());
-		ch_category.setPreferredSize(d);
-		t_keyword.setPreferredSize(new Dimension(450, 30));
-		
-		// -----------------------------------------------[ì¡°ë¦½]
-		// ì„œìª½
-		p_west.add(bt_regist);
-		p_west.add(t_title);
-		p_west.add(t_price);
-		p_west.add(t_detail);
-		p_west.add(scroll);
-		p_west.add(bt_web);
-		p_west.add(bt_file);
-		p_west.add(can);
-		p_west.add(bt_edit);
-		p_west.add(bt_del);
-		add(p_west, BorderLayout.WEST);
-		
-		// ì„¼í„°
-		p_search.add(ch_category);
-		p_search.add(t_keyword);
-		p_search.add(bt_search);
-		p_center.add(p_search, BorderLayout.NORTH);
-		p_center.add(scroll_table);
-		add(p_center);
-		
-		// -----------------------------------------------[ë¦¬ìŠ¤ë„ˆ]
-	}
-	
+   // ¼­ÂÊ
+   JPanel p_west;
+   JButton bt_regist;
+   JTextField t_title;
+   JTextField t_price;
+   JTextArea t_detail;
+   JScrollPane scroll;
+   JButton bt_web;
+   JButton bt_file;
+   Canvas can;
+   JButton bt_edit;
+   JButton bt_del;
+   
+   // ¼¾ÅÍ
+   JPanel p_center;
+   JPanel p_search; // °Ë»ö ÄÄÆ÷³ÍÆ® ¿Ã·ÁµÎ´Â ÆĞ³Î
+   Choice ch_category; // °Ë»ö Ä«Å×°í¸®
+   JTextField t_keyword; // °Ë»ö¾îÀÔ·Â
+   JButton bt_search; 
+   
+   JTable table;
+   JScrollPane scroll_table;
+   // Äµ¹ö½ºÀÇ »çÁø
+   Toolkit kit= Toolkit.getDefaultToolkit();
+   Image image;
+   JFileChooser chooser;
+   String filename; // À¯ÀúÀÇ º¹»ç¿¡ ÀÇÇØ »ı¼ºµÈ ÆÄÀÏ¸í
+   // Å×ÀÌºí
+   String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // ÄÃ·³¹è¿­
+   String[][] records= {};// ·¹ÄÚµå ¹è¿­
+      
+   public MarketPost(AppMain appMain) {
+      this.setAppMain(appMain);
+      // -----------------------------------------------[»ı¼º]
+      // ¼­ÂÊ °ü·Ã
+      p_west= new JPanel();
+      bt_regist= new JButton("»óÇ°µî·Ï");
+      t_title= new JTextField();
+      t_price= new JTextField();
+      t_detail= new JTextArea();
+      scroll= new  JScrollPane(t_detail);
+      bt_web= new JButton("À¥¿¡¼­ ÆÄÀÏ Ã£±â");
+      bt_file= new JButton("³» ÄÄÇ»ÅÍ¿¡¼­ ÆÄÀÏ Ã£±â");
+      
+      // ³»ºÎÀÍ¸í Å¬·¡½º´Â ¿ÜºÎÅ¬·¡½ºÀÇ ¸â¹öº¯¼ö, ¸Ş¼Òµå¸¦ Á¢±Ù°¡´É.
+      can= new Canvas() { // {}ºÙÀ¸¸ç extendsÈ¿°ú
+         public void paint(Graphics g) {
+            g.drawImage(image, 0, 0, 180, 180, can);
+         }
+      };
+      bt_edit= new JButton("¼öÁ¤");
+      bt_del= new JButton("»èÁ¦");
+      
+      
+      // ¼¾ÅÍ
+      p_center= new JPanel();
+      p_search= new JPanel();
+      
+      ch_category= new Choice();
+      // °Ë»ö Ä«Å×°í¸® µî·Ï
+      ch_category.add("¼±ÅÃ");
+      ch_category.add("ÀÛ¼ºÀÚ");
+      ch_category.add("³»¿ë");
+      
+      t_keyword= new JTextField();
+      bt_search= new JButton("°Ë»ö");
+      
+      table= new JTable(new AbstractTableModel() {
+         public int getRowCount() {
+            return records.length;
+         }
+         public int getColumnCount() {
+            return columns.length;
+         }
+         // ÄÃ·³ Á¦¸ñ
+         public String getColumnName(int col) {
+            return columns[col];
+         }
+         // °¢ ¼¿¿¡ µé¾î°¥ µ¥ÀÌÅÍ¸¦ ÀÌÂ÷¿ø ¹è¿­·ÎºÎÅÍ ±¸ÇÔ
+         public Object getValueAt(int row, int col) {
+            return records[row][col];
+         }
+         // JTableÀÇ °¢ ¼¿ÀÇ °ªÀ» ÁöÁ¤. ¼¿À» ÆíÁıÇÑ ÈÄ ¿£ÅÍÄ¡´Â ¼ø°£ ¾Æ·¡ÀÇ ¸Ş¼Òµå È£Ãâ
+         public void setValueAt(Object val, int row, int col) {
+            records[row][col]=(String)val; 
+         }
+         
+         public boolean isCellEditable(int row, int col) {
+            if(col==0) { // Ã¹¹øÂÅ ¿­ÀÎ product_id¸¸ ÀĞ±âÀü¿ëÀ¸·Î ¼ÂÆÃ
+               return false;
+            }else {
+               return true;
+            }
+         }
+      });
+      
+      scroll_table= new JScrollPane(table);
+      // -----------------------------------------------[½ºÅ¸ÀÏ, ·¹ÀÌ¾Æ¿ô]
+      // °øÅëÅ©±â
+      Dimension d= new Dimension(180, 30); 
+      setLayout(new BorderLayout());
+      
+      // ¼­ÂÊ
+      p_west.setPreferredSize(new Dimension(200, 700));
+      scroll.setPreferredSize(new Dimension(180, 180));
+      can.setPreferredSize(new Dimension(180, 180));
+      can.setBackground(Color.DARK_GRAY);
+      
+      t_title.setPreferredSize(d);
+      t_price.setPreferredSize(d);
+      t_detail.setPreferredSize(d);
+      
+      // ¼¾ÅÍ
+      p_center.setLayout(new BorderLayout());
+      ch_category.setPreferredSize(d);
+      t_keyword.setPreferredSize(new Dimension(450, 30));
+      
+      // -----------------------------------------------[Á¶¸³]
+      // ¼­ÂÊ
+      p_west.add(bt_regist);
+      p_west.add(t_title);
+      p_west.add(t_price);
+      p_west.add(t_detail);
+      p_west.add(scroll);
+      p_west.add(bt_web);
+      p_west.add(bt_file);
+      p_west.add(can);
+      p_west.add(bt_edit);
+      p_west.add(bt_del);
+      add(p_west, BorderLayout.WEST);
+      
+      // ¼¾ÅÍ
+      p_search.add(ch_category);
+      p_search.add(t_keyword);
+      p_search.add(bt_search);
+      p_center.add(p_search, BorderLayout.NORTH);
+      p_center.add(scroll_table);
+      add(p_center);
+      
+      // -----------------------------------------------[¸®½º³Ê]
+   }
+   
 }
