@@ -29,16 +29,16 @@ public class AppMain extends JFrame implements ActionListener{
 	JPanel p_sub;
 	JPanel p_center;
 	
-	String[] top_title= {"È¸¿ø °ü¸®","¹ÙÀÌÅ© °ü¸®","Áß°íÀåÅÍ °ü¸®","¿¹¾à°ü¸®","±â¾÷ °ü¸®","°í°´ ¼¾ÅÍ"};
+	String[] top_title= {"íšŒì› ê´€ë¦¬","ë°”ì´í¬ ê´€ë¦¬","ì¤‘ê³ ì¥í„° ê´€ë¦¬","ì˜ˆì•½ê´€ë¦¬","ê¸°ì—… ê´€ë¦¬","ê³ ê° ì„¼í„°"};
 	CustomButton[] bt_top = new CustomButton[top_title.length];
 	
 	
-	String[] sub_string = {"È¸¿ø","¹ÙÀÌÅ©","¿¬ºñ","Á¤ºñ",
-			"ÀüÃ¼Á¶È¸",
-			"°Ô½Ã±Û","·Î±×","¸®ºä",
-			"°Ô½Ã±Û","¹Ì´äº¯",
-			"°Ô½Ã±Û",
-			"ÀüÃ¼Á¶È¸"};
+	String[] sub_string = {"íšŒì›","ë°”ì´í¬","ì—°ë¹„","ì •ë¹„",
+			"ì „ì²´ì¡°íšŒ",
+			"ê²Œì‹œê¸€","ë¡œê·¸","ë¦¬ë·°",
+			"ê²Œì‹œê¸€","ë¯¸ë‹µë³€",
+			"ê²Œì‹œê¸€",
+			"ì „ì²´ì¡°íšŒ"};
 	CustomButton[] sub_btn = new CustomButton[sub_string.length];
 	
 	Page[] pages = new Page[12];

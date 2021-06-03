@@ -40,7 +40,7 @@ public class MainForm extends JFrame{
 		
 		login.login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("·Î±×ÀÎ Á¤º¸ È®ÀÎ");
+				System.out.println("ë¡œê·¸ì¸ ì •ë³´ í™•ì¸");
 				appMain.setVisible(true);
 				MainForm.this.setVisible(false);
 			}
@@ -52,7 +52,7 @@ public class MainForm extends JFrame{
 		});
 		join.join.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("È¸¿ø°¡ÀÔ Á¤º¸ ÀúÀå");
+				System.out.println("íšŒì›ê°€ì… ì •ë³´ ì €ì¥");
 				showLogin();
 			}
 		});

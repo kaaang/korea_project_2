@@ -48,9 +48,9 @@ public class JoinForm extends JPanel{
 		l_name = new JLabel("NAME");
 		l_phone = new JLabel("PHONE");
 		l_email = new JLabel("e-mail");
-		l_ymd = new JLabel("»ı³â¿ùÀÏ");
-		ymd = new JLabel("¿¹½Ã : 950309");
-		l_nick = new JLabel("´Ğ³×ÀÓ");
+		l_ymd = new JLabel("ìƒë…„ì›”ì¼");
+		ymd = new JLabel("ì˜ˆì‹œ : 950309");
+		l_nick = new JLabel("ë‹‰ë„¤ì„");
 		
 		t_id = new JTextField(20);
 		t_pass = new JTextField(20);
@@ -60,8 +60,8 @@ public class JoinForm extends JPanel{
 		t_ymd = new JTextField(20);
 		t_nick = new JTextField(20);
 		
-		join = new JButton("È¸¿ø°¡ÀÔ");
-		cancel = new JButton("Ãë¼Ò");
+		join = new JButton("íšŒì›ê°€ì…");
+		cancel = new JButton("ì·¨ì†Œ");
 		
 		
 	
