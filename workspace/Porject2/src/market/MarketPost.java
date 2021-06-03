@@ -19,7 +19,7 @@ import main.AppMain;
 import main.Page;
 
 public class MarketPost extends Page{
-	// ì„œìª½
+	// ¼­ÂÊ
 	JPanel p_west;
 	JButton bt_regist;
 	JTextField t_title;
@@ -32,58 +32,58 @@ public class MarketPost extends Page{
 	JButton bt_edit;
 	JButton bt_del;
 	
-	// ì„¼í„°
+	// ¼¾ÅÍ
 	JPanel p_center;
-	JPanel p_search; // ê²€ìƒ‰ ì»´í¬ë„ŒíŠ¸ ì˜¬ë ¤ë‘ëŠ” íŒ¨ë„
-	Choice ch_category; // ê²€ìƒ‰ ì¹´í…Œê³ ë¦¬
-	JTextField t_keyword; // ê²€ìƒ‰ì–´ì…ë ¥
+	JPanel p_search; // °Ë»ö ÄÄÆ÷³ÍÆ® ¿Ã·ÁµÎ´Â ÆĞ³Î
+	Choice ch_category; // °Ë»ö Ä«Å×°í¸®
+	JTextField t_keyword; // °Ë»ö¾îÀÔ·Â
 	JButton bt_search; 
 	
 	JTable table;
 	JScrollPane scroll_table;
-	// ìº”ë²„ìŠ¤ì˜ ì‚¬ì§„
+	// Äµ¹ö½ºÀÇ »çÁø
 		Toolkit kit= Toolkit.getDefaultToolkit();
 		Image image;
 		JFileChooser chooser;
-		String filename; // ìœ ì €ì˜ ë³µì‚¬ì— ì˜í•´ ìƒì„±ëœ íŒŒì¼ëª…
-	// í…Œì´ë¸”
-		String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // ì»¬ëŸ¼ë°°ì—´
-		String[][] records= {};// ë ˆì½”ë“œ ë°°ì—´
+		String filename; // À¯ÀúÀÇ º¹»ç¿¡ ÀÇÇØ »ı¼ºµÈ ÆÄÀÏ¸í
+	// Å×ÀÌºí
+		String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // ÄÃ·³¹è¿­
+		String[][] records= {};// ·¹ÄÚµå ¹è¿­
 	public MarketPost(AppMain appMain) {
 		super(appMain);
-		// -----------------------------------------------[ìƒì„±]
-		// ì„œìª½ ê´€ë ¨
+		// -----------------------------------------------[»ı¼º]
+		// ¼­ÂÊ °ü·Ã
 		p_west= new JPanel();
-		bt_regist= new JButton("ìƒí’ˆë“±ë¡");
+		bt_regist= new JButton("»óÇ°µî·Ï");
 		t_title= new JTextField();
 		t_price= new JTextField();
 		t_detail= new JTextArea();
 		scroll= new  JScrollPane(t_detail);
-		bt_web= new JButton("ì›¹ì—ì„œ íŒŒì¼ ì°¾ê¸°");
-		bt_file= new JButton("ë‚´ ì»´í“¨í„°ì—ì„œ íŒŒì¼ ì°¾ê¸°");
+		bt_web= new JButton("À¥¿¡¼­ ÆÄÀÏ Ã£±â");
+		bt_file= new JButton("³» ÄÄÇ»ÅÍ¿¡¼­ ÆÄÀÏ Ã£±â");
 		
-		// ë‚´ë¶€ìµëª… í´ë˜ìŠ¤ëŠ” ì™¸ë¶€í´ë˜ìŠ¤ì˜ ë©¤ë²„ë³€ìˆ˜, ë©”ì†Œë“œë¥¼ ì ‘ê·¼ê°€ëŠ¥.
-		can= new Canvas() { // {}ë¶™ìœ¼ë©° extendsíš¨ê³¼
+		// ³»ºÎÀÍ¸í Å¬·¡½º´Â ¿ÜºÎÅ¬·¡½ºÀÇ ¸â¹öº¯¼ö, ¸Ş¼Òµå¸¦ Á¢±Ù°¡´É.
+		can= new Canvas() { // {}ºÙÀ¸¸ç extendsÈ¿°ú
 			public void paint(Graphics g) {
 				g.drawImage(image, 0, 0, 180, 180, can);
 			}
 		};
-		bt_edit= new JButton("ìˆ˜ì •");
-		bt_del= new JButton("ì‚­ì œ");
+		bt_edit= new JButton("¼öÁ¤");
+		bt_del= new JButton("»èÁ¦");
 		
 		
-		// ì„¼í„°
+		// ¼¾ÅÍ
 		p_center= new JPanel();
 		p_search= new JPanel();
 		
 		ch_category= new Choice();
-		// ê²€ìƒ‰ ì¹´í…Œê³ ë¦¬ ë“±ë¡
-		ch_category.add("ì„ íƒ");
-		ch_category.add("ì‘ì„±ì");
-		ch_category.add("ë‚´ìš©");
+		// °Ë»ö Ä«Å×°í¸® µî·Ï
+		ch_category.add("¼±ÅÃ");
+		ch_category.add("ÀÛ¼ºÀÚ");
+		ch_category.add("³»¿ë");
 		
 		t_keyword= new JTextField();
-		bt_search= new JButton("ê²€ìƒ‰");
+		bt_search= new JButton("°Ë»ö");
 		
 		table= new JTable(new AbstractTableModel() {
 			public int getRowCount() {
@@ -92,24 +92,24 @@ public class MarketPost extends Page{
 			public int getColumnCount() {
 				return columns.length;
 			}
-			// ì»¬ëŸ¼ ì œëª©
+			// ÄÃ·³ Á¦¸ñ
 			public String getColumnName(int col) {
 				return columns[col];
 			}
-			// ê° ì…€ì— ë“¤ì–´ê°ˆ ë°ì´í„°ë¥¼ ì´ì°¨ì› ë°°ì—´ë¡œë¶€í„° êµ¬í•¨
+			// °¢ ¼¿¿¡ µé¾î°¥ µ¥ÀÌÅÍ¸¦ ÀÌÂ÷¿ø ¹è¿­·ÎºÎÅÍ ±¸ÇÔ
 			public Object getValueAt(int row, int col) {
 				return records[row][col];
 			}
-			// JTableì˜ ê° ì…€ì˜ ê°’ì„ ì§€ì •
-			// ì…€ì„ í¸ì§‘í•œ í›„ ì—”í„°ì¹˜ëŠ” ìˆœê°„ ì•„ë˜ì˜ ë©”ì†Œë“œ í˜¸ì¶œ
+			// JTableÀÇ °¢ ¼¿ÀÇ °ªÀ» ÁöÁ¤
+			// ¼¿À» ÆíÁıÇÑ ÈÄ ¿£ÅÍÄ¡´Â ¼ø°£ ¾Æ·¡ÀÇ ¸Ş¼Òµå È£Ãâ
 			public void setValueAt(Object val, int row, int col) {
 				records[row][col]=(String)val; 
 //				updateProduct();
-//				System.out.println(row+","+col+"ë²ˆì§¸ ì…€ì˜ ë°ì´í„°ëŠ” "+val+"ë¡œ ë°”ê¿€ê²Œìš”~");
+//				System.out.println(row+","+col+"¹øÂ° ¼¿ÀÇ µ¥ÀÌÅÍ´Â "+val+"·Î ¹Ù²Ü°Ô¿ä~");
 			}
-			// ë‹¤ë¥¸ ë©”ì†Œë“œì™€ ë§ˆì¹œê°€ì§€ë¡œ, ì•„ë˜ì˜ isCe;;Editableë©”ì„œë“œë„ í˜¸ì¶œìê°€ JTable
+			// ´Ù¸¥ ¸Ş¼Òµå¿Í ¸¶Ä£°¡Áö·Î, ¾Æ·¡ÀÇ isCe;;Editable¸Ş¼­µåµµ È£ÃâÀÚ°¡ JTable
 			public boolean isCellEditable(int row, int col) {
-				if(col==0) { // ì²«ë²ˆì©¨ ì—´ì¸ product_idë§Œ ì½ê¸°ì „ìš©ìœ¼ë¡œ ì…‹íŒ…
+				if(col==0) { // Ã¹¹øÂÅ ¿­ÀÎ product_id¸¸ ÀĞ±âÀü¿ëÀ¸·Î ¼ÂÆÃ
 					return false;
 				}else {
 					return true;
