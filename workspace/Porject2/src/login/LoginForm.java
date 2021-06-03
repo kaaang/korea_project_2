@@ -11,6 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.MemberDao;
+import util.MemberDto;
+
 public class LoginForm extends JPanel{
 	
 	JPanel nul;
@@ -51,6 +54,20 @@ public class LoginForm extends JPanel{
 		add(nul2);
 		add(login);
 		add(join);
+		
+		login.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MemberDao conn=new MemberDao();
+				try {
+					LoginDto memberDto = conn.loginCheck("tlsgur");
+					System.out.println(memberDto.getId()+":"+memberDto.getPass());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+				
+			}
+		});
 		
 		
 		

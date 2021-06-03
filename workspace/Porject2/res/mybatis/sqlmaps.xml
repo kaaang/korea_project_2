@@ -10,4 +10,7 @@
     <select id="selectOne" resultType="util.MemberDto">
         select * from latte_comments WHERE comment_id=#{comment_id}
     </select>
+    <select id="loginCheck" resultType="login.LoginDto">
+        select * from user WHERE id=#{id}
+    </select>
 </mapper>

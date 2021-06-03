@@ -3,6 +3,8 @@ package util;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import login.LoginDto;
+
 import java.util.List;
 
 public class MemberDao {
@@ -28,4 +30,14 @@ public class MemberDao {
         sqlSession.close();
         return dto;
     }
+    
+    public LoginDto loginCheck(String id) throws Exception {
+    	SqlSession sqlSession = factory.openSession();
+    	LoginDto logindto = sqlSession.selectOne("loginCheck",id);
+    	sqlSession.close();
+    	
+    	return logindto;
+    }
+    
+    
 }
