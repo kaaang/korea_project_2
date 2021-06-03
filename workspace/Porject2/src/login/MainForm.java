@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -16,14 +18,23 @@ public class MainForm extends JFrame{
 	Image img=null;
 	Toolkit kit;
 	
+	JPanel p_center;
 	
-	LoginForm p_center;
+	LoginForm login;
+	JoinForm join;
 	
 	
 	public MainForm() {
 		p_west = new JPanel();
-		p_center = new LoginForm();
+		p_center = new JPanel();
+		login = new LoginForm();
+		join = new JoinForm();
 		
+		login.join.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				join();
+			}
+		});
 		
 		p_west.setPreferredSize(new Dimension(1000, 800));
 		p_west.setBackground(Color.DARK_GRAY);
@@ -33,7 +44,10 @@ public class MainForm extends JFrame{
 		
 		
 		add(p_west,BorderLayout.WEST);
+		p_center.add(login);
+		p_center.add(join);
 		add(p_center,BorderLayout.CENTER);
+		
 		
 		
 		setSize(1400, 800);
@@ -43,6 +57,14 @@ public class MainForm extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 	}
+	
+	public void join() {
+		login.setVisible(false);
+		join.setVisible(true);
+		p_center.updateUI();
+		
+	}
+	
 	
 	
 	

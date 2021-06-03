@@ -3,6 +3,8 @@ package login;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -49,6 +51,9 @@ public class LoginForm extends JPanel{
 		add(nul2);
 		add(login);
 		add(join);
+		
+		
+		
 		
 		setVisible(true);
 		setBackground(Color.gray);
