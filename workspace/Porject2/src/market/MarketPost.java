@@ -54,7 +54,7 @@ public class MarketPost extends Page{
    String[][] records= {};// 레코드 배열
       
    public MarketPost(AppMain appMain) {
-      this.setAppMain(appMain);
+      super(appMain);
       // -----------------------------------------------[생성]
       // 서쪽 관련
       p_west= new JPanel();
