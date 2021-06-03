@@ -1,7 +1,10 @@
 package market;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Choice;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -42,15 +45,16 @@ public class MarketPost extends Page{
 	JTable table;
 	JScrollPane scroll_table;
 	// 캔버스의 사진
-		Toolkit kit= Toolkit.getDefaultToolkit();
-		Image image;
-		JFileChooser chooser;
-		String filename; // 유저의 복사에 의해 생성된 파일명
+	Toolkit kit= Toolkit.getDefaultToolkit();
+	Image image;
+	JFileChooser chooser;
+	String filename; // 유저의 복사에 의해 생성된 파일명
 	// 테이블
-		String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // 컬럼배열
-		String[][] records= {};// 레코드 배열
+	String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // 컬럼배열
+	String[][] records= {};// 레코드 배열
+		
 	public MarketPost(AppMain appMain) {
-		super(appMain);
+		this.setAppMain(appMain);
 		// -----------------------------------------------[생성]
 		// 서쪽 관련
 		p_west= new JPanel();
@@ -100,14 +104,11 @@ public class MarketPost extends Page{
 			public Object getValueAt(int row, int col) {
 				return records[row][col];
 			}
-			// JTable의 각 셀의 값을 지정
-			// 셀을 편집한 후 엔터치는 순간 아래의 메소드 호출
+			// JTable의 각 셀의 값을 지정. 셀을 편집한 후 엔터치는 순간 아래의 메소드 호출
 			public void setValueAt(Object val, int row, int col) {
 				records[row][col]=(String)val; 
-//				updateProduct();
-//				System.out.println(row+","+col+"번째 셀의 데이터는 "+val+"로 바꿀게요~");
 			}
-			// 다른 메소드와 마친가지로, 아래의 isCe;;Editable메서드도 호출자가 JTable
+			
 			public boolean isCellEditable(int row, int col) {
 				if(col==0) { // 첫번쩨 열인 product_id만 읽기전용으로 셋팅
 					return false;
@@ -118,7 +119,49 @@ public class MarketPost extends Page{
 		});
 		
 		scroll_table= new JScrollPane(table);
+		// -----------------------------------------------[스타일, 레이아웃]
+		// 공통크기
+		Dimension d= new Dimension(180, 30); 
+		setLayout(new BorderLayout());
+		
+		// 서쪽
+		p_west.setPreferredSize(new Dimension(200, 700));
+		scroll.setPreferredSize(new Dimension(180, 180));
+		can.setPreferredSize(new Dimension(180, 180));
+		can.setBackground(Color.DARK_GRAY);
+		
+		t_title.setPreferredSize(d);
+		t_price.setPreferredSize(d);
+		t_detail.setPreferredSize(d);
+		
+		// 센터
+		p_center.setLayout(new BorderLayout());
+		ch_category.setPreferredSize(d);
+		t_keyword.setPreferredSize(new Dimension(450, 30));
+		
+		// -----------------------------------------------[조립]
+		// 서쪽
+		p_west.add(bt_regist);
+		p_west.add(t_title);
+		p_west.add(t_price);
+		p_west.add(t_detail);
+		p_west.add(scroll);
+		p_west.add(bt_web);
+		p_west.add(bt_file);
+		p_west.add(can);
+		p_west.add(bt_edit);
+		p_west.add(bt_del);
+		add(p_west, BorderLayout.WEST);
+		
+		// 센터
+		p_search.add(ch_category);
+		p_search.add(t_keyword);
+		p_search.add(bt_search);
+		p_center.add(p_search, BorderLayout.NORTH);
+		p_center.add(scroll_table);
+		add(p_center);
+		
+		// -----------------------------------------------[리스너]
 	}
 	
-
 }
