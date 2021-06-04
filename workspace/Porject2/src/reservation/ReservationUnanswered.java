@@ -57,15 +57,7 @@ public class ReservationUnanswered extends Page{
    String[] columns= {"book_date", "memo ", "pk_booking ", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
    
-   // DB관련
-      String driver="com.mysql.jdbc.Driver";
-   String url="jdbc:mysql://localhost:3306/javase?characterEncoding=UTF-8";
-   String id="root";
-   String pass="1234";
-   Connection con; 
-   PreparedStatement pstmt;
-   ResultSet rs; 
-      
+
    public ReservationUnanswered(AppMain appMain) {
       super(appMain);
       // -----------------------------------------------[생성]

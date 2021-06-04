@@ -11,10 +11,15 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.util.ArrayList;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -40,7 +45,7 @@ public class ReservationMain extends Page{
    JButton bt_del;
    
    // 센터
-   JPanel p_center;
+   JPanel p_center; 
    JPanel p_search; // 검색 컴포넌트 올려두는 패널
    Choice ch_category; // 검색 카테고리
    JTextField t_keyword; // 검색어입력
@@ -54,8 +59,10 @@ public class ReservationMain extends Page{
    JFileChooser chooser;
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
-   String[] columns= {"book_date", "memo ", "pk_booking ", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
+   String[] columns= {"book_date", "memo ", "pk_booking", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
+   
+
    private Connection con;
       
 //   ArrayList<ChCategory> OneList=new ArrayList<ChCategory>();
@@ -127,13 +134,14 @@ public class ReservationMain extends Page{
       
       scroll_table= new JScrollPane(table);
       // -----------------------------------------------[스타일, 레이아웃]
+      
       // 공통크기
       Dimension d= new Dimension(180, 30); 
       setLayout(new BorderLayout());
       
       // 서쪽
       p_west.setPreferredSize(new Dimension(200, 700));
-      scroll.setPreferredSize(new Dimension(180, 180));
+      scroll.setPreferredSize(new Dimension(180, 180));  
       can.setPreferredSize(new Dimension(180, 180));
       can.setBackground(Color.PINK);
       
@@ -147,6 +155,7 @@ public class ReservationMain extends Page{
       t_keyword.setPreferredSize(new Dimension(450, 30));
       
       // -----------------------------------------------[조립]
+      
       // 서쪽
       p_west.add(bt_regist);
       p_west.add(t_title);
@@ -168,11 +177,18 @@ public class ReservationMain extends Page{
       p_center.add(scroll_table);
       add(p_center);
       
+      
+      
+     
+      
+      
+      
       // -----------------------------------------------[리스너]
       
      bt_regist.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
          regist();
+
       }
    });
      
@@ -208,6 +224,9 @@ public class ReservationMain extends Page{
  
      
      
+
+     
+     
    }
    
    public void regist() {
@@ -230,9 +249,41 @@ public class ReservationMain extends Page{
    public void filefind() {
       System.out.println("내컴퓨터에서 검색하는 중입니다.");
    }
+//   public void refresh() {
+//	   BookingDao conn=new BookingDao();
+//	   
+//	   List<BookingDto> list;
+//	try {
+//		list = conn.BookingSelect();
+//		
+//		System.out.println(list.get(1).getMemo());
+//		System.out.println(list.get(1).getBook_date());
+//		System.out.println(list.get(1).getPk_booking());
+//		System.out.println(list.get(1).getPk_company());
+//		System.out.println(list.get(1).getPk_mybike());
+//		System.out.println(list.get(1).getPk_user());
+//		System.out.println(list.get(1).getPk_wanted());
+//		System.out.println(list.get(1).getPrice());
+//		System.out.println(list.get(1).getRegdate());
+//		
+//	} catch (Exception e) {
+//
+//		e.printStackTrace();
+//	}
+//	   
+//   }
+   
+ 
    
    
-   
+
    
    
   }
+
+
+
+
+
+
+

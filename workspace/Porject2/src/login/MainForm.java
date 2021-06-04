@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import main.AppMain;
@@ -32,7 +33,7 @@ public class MainForm extends JFrame{
 		p_west = new JPanel();
 		p_center = new JPanel();
 		login = new LoginForm();
-		join = new JoinForm();
+		join = new JoinForm(this);
 		appMain = new AppMain();
 		
 		
@@ -40,9 +41,8 @@ public class MainForm extends JFrame{
 		
 		login.login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("로그인 정보 확인");
-				appMain.setVisible(true);
-				MainForm.this.setVisible(false);
+				loginCheck();
+				
 			}
 		});
 		login.join.addActionListener(new ActionListener() {
@@ -50,12 +50,7 @@ public class MainForm extends JFrame{
 				showJoin();
 			}
 		});
-		join.join.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("회원가입 정보 저장");
-				showLogin();
-			}
-		});
+		
 		join.cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showLogin();				
@@ -98,7 +93,35 @@ public class MainForm extends JFrame{
 		
 	}
 	
+	public void loginCheck() {
+		
+		String input_id = login.t_id.getText();
+		String input_pass = new String(login.t_pass.getPassword());
+		
+		String db_id;
+		String db_pass;
+		
+		LoginDao conn=new LoginDao();
+		try {
+			LoginDto memberDto = conn.loginCheck(input_id);
+			db_id = memberDto.getId();
+			db_pass = memberDto.getPass();
+			if(input_id.equals(db_id) && input_pass.equals(db_pass)) {
+				appMain.setVisible(true);
+				MainForm.this.setVisible(false);				
+			}else {
+				failLogin();
+			}
+		} catch (Exception e1) {
+			failLogin();
+		}
+	}
 	
+	public void failLogin() {
+		JOptionPane.showMessageDialog(appMain, "로그인 정보를 확인하세요.");
+		login.t_id.setText("");
+		login.t_pass.setText("");
+	}
 	
 	
 	public static void main(String[] args) {

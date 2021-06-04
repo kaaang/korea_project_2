@@ -3,12 +3,15 @@ package login;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -37,9 +40,9 @@ public class JoinForm extends JPanel{
 	
 	
 
-
-	
-	public JoinForm() {
+	MainForm main;
+	public JoinForm(MainForm main) {
+		this.main = main;
 		nul = new JPanel();
 		nul2 = new JPanel();
 		
@@ -117,9 +120,48 @@ public class JoinForm extends JPanel{
 		add(cancel);
 		
 		
+		
+		
+		
+		join.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertJoin();
+			}
+		});
+		
+		
+		
 		setVisible(false);
 		setBackground(Color.gray);
 		setPreferredSize(new Dimension(380, 800));
 		setLayout(new FlowLayout());
 	}
+	
+	public void insertJoin() {
+		String db_id = t_id.getText();
+		String db_pass = t_pass.getText();
+		String db_name = t_name.getText();
+		String db_phone = t_phone.getText();
+		String db_email = t_email.getText();
+		String db_ymd= t_ymd.getText();
+		String db_nick = t_nick.getText();
+		
+		JoinDto joinDto = new JoinDto(db_id, db_pass, db_name, db_phone, db_email, db_ymd, db_nick);
+		JoinDao joinDao = new JoinDao();
+		try {
+			int result = joinDao.insertJoin(joinDto);
+			if(result>0) {
+				JOptionPane.showMessageDialog(main, "회원가입 성공");
+				main.showLogin();
+			}else {
+				JOptionPane.showMessageDialog(main, "회원가입 실패");				
+				main.showLogin();
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(main, "회원가입 실패");				
+			main.showLogin();
+			e.printStackTrace();
+		}
+	}
+	
 }
