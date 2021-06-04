@@ -113,7 +113,7 @@ public class MarketPost extends Page{
          // JTable의 각 셀의 값을 지정. 셀을 편집한 후 엔터치는 순간 아래의 메소드 호출
          public void setValueAt(Object val, int row, int col) {
             records[row][col]=(String)val; 
-            updateMarket(); // 수정
+            //updateMarket(); // 수정
          }
          
          public boolean isCellEditable(int row, int col) {
@@ -168,6 +168,7 @@ public class MarketPost extends Page{
       p_center.add(scroll_table);
       add(p_center);
       
+      /*
       // -----------------------------------------------[리스너]
       bt_regist.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -193,6 +194,7 @@ public class MarketPost extends Page{
     		}
     	});
       
+       */
    }
    // -------------------------------------------------------------------[메소드]
    // 상품 등록
