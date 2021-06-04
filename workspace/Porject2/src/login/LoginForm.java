@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import util.MemberDao;
@@ -20,7 +21,7 @@ public class LoginForm extends JPanel{
 	JLabel id;
 	JTextField t_id;
 	JLabel pass;
-	JTextField t_pass;
+	JPasswordField t_pass;
 	
 	JPanel nul2;
 	JButton login;
@@ -31,7 +32,7 @@ public class LoginForm extends JPanel{
 		id = new JLabel("ID");
 		t_id = new JTextField(20);
 		pass = new JLabel("PASSWORD");
-		t_pass = new JTextField(20);
+		t_pass = new JPasswordField(20);
 		nul2 = new JPanel();
 		
 		login = new JButton("LOGIN");
@@ -55,20 +56,7 @@ public class LoginForm extends JPanel{
 		add(login);
 		add(join);
 		
-		login.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				MemberDao conn=new MemberDao();
-				try {
-					LoginDto memberDto = conn.loginCheck("tlsgur");
-					System.out.println(memberDto.getId()+":"+memberDto.getPass());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
-				
-			}
-		});
-		
+	
 		
 		
 		
@@ -77,4 +65,6 @@ public class LoginForm extends JPanel{
 		setPreferredSize(new Dimension(380, 800));
 		setLayout(new FlowLayout());
 	}
+	
+	
 }
