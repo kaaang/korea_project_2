@@ -23,7 +23,7 @@ import javax.swing.table.AbstractTableModel;
 
 import main.AppMain;
 import main.Page;
-import reservation.BookingDao;
+//import reservation.BookingDao;
 
 public class CompanyMain extends Page{
 	   
@@ -237,27 +237,27 @@ public class CompanyMain extends Page{
 	    public void filefind() {
 	       System.out.println("내컴퓨터에서 검색하는 중입니다.");
 	    }
-	    public void refresh() {
-	 	   BookingDao conn=new BookingDao();
-	 	   
-	 	   List<CompanyDto> list;
-	 	try {
-	 		list = conn.CompanySelect();
-	 		
-	 		System.out.println(list.get(1).getAddr());
-	 		System.out.println(list.get(1).getComp_id());
-	 		System.out.println(list.get(1).getComp_pass());
-	 		System.out.println(list.get(1).getIntroduce());
-	 		System.out.println(list.get(1).getPk_company());
-	 		System.out.println(list.get(1).getTel());
-
-	 		
-	 	} catch (Exception e) {
-
-	 		e.printStackTrace();
-	 	}
-	 	   
-	    }
+//	    public void refresh() {
+//	 	   BookingDao conn=new BookingDao();
+//	 	   
+//	 	   List<CompanyDto> list;
+//	 	try {
+//	 		list = conn.CompanySelect();
+//	 		
+//	 		System.out.println(list.get(1).getAddr());
+//	 		System.out.println(list.get(1).getComp_id());
+//	 		System.out.println(list.get(1).getComp_pass());
+//	 		System.out.println(list.get(1).getIntroduce());
+//	 		System.out.println(list.get(1).getPk_company());
+//	 		System.out.println(list.get(1).getTel());
+//
+//	 		
+//	 	} catch (Exception e) {
+//
+//	 		e.printStackTrace();
+//	 	}
+//	 	   
+//	    }
 	    
 	  
 	    

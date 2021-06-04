@@ -39,7 +39,6 @@ public class JoinForm extends JPanel{
 	JButton cancel;
 	
 	
-	JoinDao joinDao = new JoinDao();
 
 	MainForm main;
 	public JoinForm(MainForm main) {
@@ -148,7 +147,7 @@ public class JoinForm extends JPanel{
 		String db_nick = t_nick.getText();
 		
 		JoinDto joinDto = new JoinDto(db_id, db_pass, db_name, db_phone, db_email, db_ymd, db_nick);
-		
+		JoinDao joinDao = new JoinDao();
 		try {
 			int result = joinDao.insertJoin(joinDto);
 			if(result>0) {

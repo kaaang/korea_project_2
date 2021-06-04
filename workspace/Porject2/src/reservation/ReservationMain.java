@@ -61,14 +61,11 @@ public class ReservationMain extends Page{
    // 테이블
    String[] columns= {"book_date", "memo ", "pk_booking", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
-<<<<<<< HEAD
    
 
-=======
    private Connection con;
       
 //   ArrayList<ChCategory> OneList=new ArrayList<ChCategory>();
->>>>>>> a973572160e709c620efbaecd87ca44ededd7b5c
    
    public ReservationMain(AppMain appMain) {
       super(appMain);
@@ -252,29 +249,29 @@ public class ReservationMain extends Page{
    public void filefind() {
       System.out.println("내컴퓨터에서 검색하는 중입니다.");
    }
-   public void refresh() {
-	   BookingDao conn=new BookingDao();
-	   
-	   List<BookingDto> list;
-	try {
-		list = conn.BookingSelect();
-		
-		System.out.println(list.get(1).getMemo());
-		System.out.println(list.get(1).getBook_date());
-		System.out.println(list.get(1).getPk_booking());
-		System.out.println(list.get(1).getPk_company());
-		System.out.println(list.get(1).getPk_mybike());
-		System.out.println(list.get(1).getPk_user());
-		System.out.println(list.get(1).getPk_wanted());
-		System.out.println(list.get(1).getPrice());
-		System.out.println(list.get(1).getRegdate());
-		
-	} catch (Exception e) {
-
-		e.printStackTrace();
-	}
-	   
-   }
+//   public void refresh() {
+//	   BookingDao conn=new BookingDao();
+//	   
+//	   List<BookingDto> list;
+//	try {
+//		list = conn.BookingSelect();
+//		
+//		System.out.println(list.get(1).getMemo());
+//		System.out.println(list.get(1).getBook_date());
+//		System.out.println(list.get(1).getPk_booking());
+//		System.out.println(list.get(1).getPk_company());
+//		System.out.println(list.get(1).getPk_mybike());
+//		System.out.println(list.get(1).getPk_user());
+//		System.out.println(list.get(1).getPk_wanted());
+//		System.out.println(list.get(1).getPrice());
+//		System.out.println(list.get(1).getRegdate());
+//		
+//	} catch (Exception e) {
+//
+//		e.printStackTrace();
+//	}
+//	   
+//   }
    
  
    

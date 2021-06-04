@@ -13,4 +13,9 @@
     <select id="loginCheck" resultType="login.LoginDto">
         select * from user WHERE id=#{id}
     </select>
+    <!--         Dao명                       Dto명-->
+    <insert id="JoinDao" parameterType="login.JoinDto">
+		insert into user(id, pass, name, phone,email,birth,user_nickname) 
+    	values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
+    </insert>
 </mapper>
