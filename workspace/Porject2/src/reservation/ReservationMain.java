@@ -58,7 +58,7 @@ public class ReservationMain extends Page{
    String[][] records= {};// 레코드 배열
    private Connection con;
       
-   ArrayList<ChCategory> OneList=new ArrayList<ChCategory>();
+//   ArrayList<ChCategory> OneList=new ArrayList<ChCategory>();
    
    public ReservationMain(AppMain appMain) {
       super(appMain);
