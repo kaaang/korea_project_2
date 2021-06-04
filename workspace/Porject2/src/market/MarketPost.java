@@ -10,8 +10,17 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -31,6 +40,7 @@ public class MarketPost extends Page{
    JPanel p_west;
    JButton bt_regist;
    JTextField t_title;
+   JTextField t_user;
    JTextField t_price;
    JTextArea t_detail;
    JScrollPane scroll;
@@ -55,10 +65,10 @@ public class MarketPost extends Page{
    JFileChooser chooser= new JFileChooser("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res");
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
-   String[] columns= {"pk_usermarket", "title ", "price ", "regdate", "pk_user "}; // 컬럼배열
+   String[] columns= {"pk_usermarket", "pk_user ", "title ", "price ", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
     
-
+   
    public MarketPost(AppMain appMain) {
       super(appMain);
       // -----------------------------------------------[생성]
@@ -66,6 +76,7 @@ public class MarketPost extends Page{
       p_west= new JPanel();
       bt_regist= new JButton("상품등록");
       t_title= new JTextField();
+      t_user= new JTextField();
       t_price= new JTextField();
       t_detail= new JTextArea();
       scroll= new  JScrollPane(t_detail);
@@ -150,6 +161,7 @@ public class MarketPost extends Page{
       // 서쪽
       p_west.add(bt_regist);
       p_west.add(t_title);
+      p_west.add(t_user);
       p_west.add(t_price);
       p_west.add(t_detail);
       p_west.add(scroll);
@@ -168,36 +180,91 @@ public class MarketPost extends Page{
       p_center.add(scroll_table);
       add(p_center);
       
-      /*
+     
       // -----------------------------------------------[리스너]
-      bt_regist.addActionListener(new ActionListener() {
+      // 이미지- 웹
+      bt_web.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			// 유효성 체크
-			Integer.parseInt(t_price.getText());
-			if(JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")){
-				regist();
-  			}
+			imgWeb();
 		}
 	});
+      // 이미지- 내장
+      bt_file.addActionListener(new ActionListener() {
+  		public void actionPerformed(ActionEvent e) {
+  			imgLocal();
+  		}
+  	});
+      // 등록
+      bt_regist.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				// 유효성 체크
+				Integer.parseInt(t_price.getText());				
+				if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+					insertMarketPost();
+				}
+			}catch(NumberFormatException e1){
+				JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "가격은 숫자만 입력 가능합니다.");
+				t_price.setText("");
+				t_price.requestFocus();
+			}
+			
+			
+		}
+	});
+      // 수정
       bt_edit.addActionListener(new ActionListener() {
   		public void actionPerformed(ActionEvent e) {
-  			if(JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "수정 하시겠습니까?")){
-  				edit();
+  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+				
   			}
   		}
   	});
+      // 삭제
       bt_del.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			if(JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "삭제 하시겠습니까?")){
-    				delete();      				
-      			}
+	  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+					
+	  			}
     		}
     	});
+      // 검색
+      bt_search.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	});
       
-       */
+      // 테이블 연결
+      table.addMouseListener(new MouseAdapter() {
+		public void mouseReleased(MouseEvent e) {
+			
+		}
+	});
+      // 생성자 호출
    }
    // -------------------------------------------------------------------[메소드]
    // 상품 등록
+   public void insertMarketPost() {
+	   String user= t_user.getText();
+	   String title= t_title.getText();
+	   int price= Integer.parseInt(t_price.getText());
+	   String content= t_detail.getText();
+//	   String filename= filename; 어떻게 처리할지 고민
+	   
+	   MarketPostDto marketDto= new MarketPostDto(user, title, price, content, filename);
+	   MarketPostDao marketDao= new MarketPostDao();
+	   
+	   try {
+		int result= marketDao.insertMarketPost(marketDto);
+		if(result>0) {
+			JOptionPane.showMessageDialog(this.getAppMain(), "등록 완료");
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+		
+	}
+   }
    public void regist() {
 	   
    }
@@ -205,4 +272,101 @@ public class MarketPost extends Page{
 
 	
    }
+   // -------------------------------------------------------------------[이미지 등록]
+   // 웹에서 사진 올리기
+   public void imgWeb() {
+	   String path= JOptionPane.showInputDialog(this.getAppMain(),"경로 입력");
+	   URL url= null;
+	   HttpURLConnection httpCon= null;
+	   InputStream is= null;
+	   FileOutputStream fos= null;
+	   
+	   try {
+		url= new URL(path);
+		httpCon= (HttpURLConnection)url.openConnection();
+		httpCon.setRequestMethod("GET");
+		
+		is= httpCon.getInputStream();
+		long time= System.currentTimeMillis();
+		filename= time+"."+FileManager.getExtend(path,"/");
+		fos= new FileOutputStream("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
+		
+		int data= -1;
+		while(true) {
+			data= is.read();
+			if(data== -1) break;
+			fos.write(data);
+		}
+		JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+	} catch (MalformedURLException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}finally {
+		if(fos!=null) {
+			try {
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(is!=null) {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}  
+   }
+   
+   // 내장 폴더에서 사진 올리기
+   public void imgLocal() {
+	   FileInputStream fis=null;
+	   FileOutputStream fos= null;
+	   
+	   if(chooser.showOpenDialog(this.getAppMain())== JFileChooser.APPROVE_OPTION) {
+		   File file= chooser.getSelectedFile();
+		   image= kit.getImage(file.getAbsolutePath());
+		   can.repaint();
+		   
+		   try {
+			fis= new FileInputStream(file);
+			long time= System.currentTimeMillis();
+			filename= time+"."+FileManager.getExtend(file.getAbsolutePath(),"\\");
+			fos= new FileOutputStream("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
+			
+			int data= -1;
+			byte[] buff= new byte[1024];
+			while(true) {
+				data= fis.read(buff);
+				if(data== -1)break;
+				fos.write(buff);
+			}
+			JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+		   } catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			if(fos!= null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(fis!= null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		   
+	   } 
+   }
+   
+   
 }
