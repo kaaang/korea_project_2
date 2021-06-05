@@ -18,7 +18,7 @@
 		insert into user(id, pass, name, phone,email,birth,user_nickname) 
     	values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
     </insert>
-    <!---------------------------------- 진아 ---------------------------------->
+    <!-- 진아 -->
     <insert id="MarketDao" parameterType="market.MarketPostDto">
 		insert into usermarket(pk_user, title, price, content, filename) 
     	values(#{pk_user},#{title},#{price},#{content},#{filename})

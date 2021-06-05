@@ -147,37 +147,47 @@ public class JoinForm extends JPanel{
 		String db_nick = t_nick.getText();
 		
 		
-		// select문 실행 후 insert 살향해야함
+		
+		String id="";
+		String nick="";
+		
 		LoginDao conn=new LoginDao();
 		try {
-			LoginDto memberDto = conn.loginCheck(db_id);
-			db_id = memberDto.getId();
-			db_pass = memberDto.getPass();
-			if(true) {
-							
+			LoginDto loginDto = conn.loginCheck(db_id);
+			id = loginDto.getId();
+			nick=loginDto.getUser_nickname();
+			System.out.println(id);
+			System.out.println(nick);
+			if(db_id.equals(id)) {
+				JOptionPane.showMessageDialog(main, "아이디가 중복됩니다.");	
+				return;
+			}else if(db_nick.equals(nick)){
+				JOptionPane.showMessageDialog(main, "닉네임이 중복됩니다.");
+				return;
 			}else {
-				
 			}
 		} catch (Exception e1) {
-			
-		}
-		
-		JoinDto joinDto = new JoinDto(db_id, db_pass, db_name, db_phone, db_email, db_ymd, db_nick);
-		JoinDao joinDao = new JoinDao();
-		try {
-			int result = joinDao.insertJoin(joinDto);
-			if(result>0) {
-				JOptionPane.showMessageDialog(main, "회원가입 성공");
-				main.showLogin();
-			}else {
+			JoinDto joinDto = new JoinDto(db_id, db_pass, db_name, db_phone, db_email, db_ymd, db_nick);
+			JoinDao joinDao = new JoinDao();
+			try {
+				int result = joinDao.insertJoin(joinDto);
+				if(result>0) {
+					JOptionPane.showMessageDialog(main, "회원가입 성공");
+					main.showLogin();
+				}else {
+					JOptionPane.showMessageDialog(main, "회원가입 실패");				
+					main.showLogin();
+				}
+			} catch (Exception e) {
 				JOptionPane.showMessageDialog(main, "회원가입 실패");				
 				main.showLogin();
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(main, "회원가입 실패");				
-			main.showLogin();
-			e.printStackTrace();
 		}
+		
 	}
+	
+	
+	
 	
 }
