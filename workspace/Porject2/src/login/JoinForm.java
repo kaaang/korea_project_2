@@ -146,6 +146,22 @@ public class JoinForm extends JPanel{
 		String db_ymd= t_ymd.getText();
 		String db_nick = t_nick.getText();
 		
+		
+		// select문 실행 후 insert 살향해야함
+		LoginDao conn=new LoginDao();
+		try {
+			LoginDto memberDto = conn.loginCheck(db_id);
+			db_id = memberDto.getId();
+			db_pass = memberDto.getPass();
+			if(true) {
+							
+			}else {
+				
+			}
+		} catch (Exception e1) {
+			
+		}
+		
 		JoinDto joinDto = new JoinDto(db_id, db_pass, db_name, db_phone, db_email, db_ymd, db_nick);
 		JoinDao joinDao = new JoinDao();
 		try {
