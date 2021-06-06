@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev">
+
+
+
+
+	<!--     ksh            -->
+    <insert id="JoinDao" parameterType="login.JoinDto">
+		insert into user(id, pass, name, phone,email,birth,user_nickname) 
+    	values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
+    </insert>
+    <select id="id_check" resultType="login.LoginDto">
+        select * from user WHERE id=#{id}
+    </select>
+    <select id="nick_check" resultType="login.LoginDto">
+        select * from user WHERE user_nickname=#{user_nickname}
+    </select>
+    
+    
+    
+    
+    <select id="loginCheck" resultType="login.LoginDto">
+        select * from user WHERE id=#{id}
+    </select>
+
+    <!--  진아 -->
+    <insert id="insertMarketPost" parameterType="market.MarketPostDto">
+		insert into usermarket(pk_user, title, price, content, filename) 
+    	values(#{pk_user},#{title},#{price},#{content},#{filename})
+    </insert>
+    
+    <select id="selectMarketPostList" resultType="market.MarketPostDto">
+        select * from usermarket order by pk_usermarket desc
+        
+    </select>
+    
+     <select id="selectMarketPostOne" resultType="util.MemberDto">
+        select pk_usermarket, pk_user, title, content, price, regdate  from usermarket WHERE pk_usermarket= #{pk_usermarket}
+    </select>
+    
+  	<update id="updateMarketPost">
+		update usermarket set title = #{title}, price= #{price},content = #{content}, filename- #{filename} WHERE pk_usermarket= #{pk_usermarket}
+	</update> 
+
+   <delete id="deleteMarketPost">
+		delete from usermarket  WHERE pk_usermarket= #{pk_usermarket}
+	</delete>
+	
+    <select id= "selectMarketSearch" resultType= "market.MarketPostDto">
+    	select * from usermarket where title like '%#{t_search}%' or content like '%#{t_search}%'
+	</select>
+    
+</mapper>
