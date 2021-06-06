@@ -4,20 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="dev">
-    <select id="selectDataAll" resultType="util.MemberDto">
-        select * from latte_comments
-    </select>
-    <select id="selectOne" resultType="util.MemberDto">
-        select * from latte_comments WHERE comment_id=#{comment_id}
-    </select>
-    <select id="loginCheck" resultType="login.LoginDto">
-        select * from user WHERE id=#{id}
-    </select>
-    <!--         Dao명                       Dto명-->
+
+
+
+
+	<!--     ksh            -->
     <insert id="JoinDao" parameterType="login.JoinDto">
 		insert into user(id, pass, name, phone,email,birth,user_nickname) 
     	values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
     </insert>
+    <select id="id_check" resultType="login.LoginDto">
+        select * from user WHERE id=#{id}
+    </select>
+    <select id="nick_check" resultType="login.LoginDto">
+        select * from user WHERE user_nickname=#{user_nickname}
+    </select>
+    
+    
+    
+    
+    <select id="loginCheck" resultType="login.LoginDto">
+        select * from user WHERE id=#{id}
+    </select>
+    
+    
+    
+    
+    
     <!-- 진아 -->
     <insert id="MarketDao" parameterType="market.MarketPostDto">
 		insert into usermarket(pk_user, title, price, content, filename) 

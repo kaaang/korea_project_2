@@ -113,6 +113,7 @@ public class MainForm extends JFrame{
 				failLogin();
 			}
 		} catch (Exception e1) {
+			e1.printStackTrace();
 			failLogin();
 		}
 	}
