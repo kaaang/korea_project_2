@@ -8,7 +8,7 @@ import util.Mybatis;
 public class JoinDao {
 	 private SqlSessionFactory factory = Mybatis.getSqlSession();
 
-	    
+
     public int insertJoin(JoinDto joinDto) throws Exception {
     	SqlSession sqlSession = factory.openSession();
     	//삽입, 삭제, 갱신은 return 값 int
