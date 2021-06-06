@@ -7,13 +7,13 @@ public class MarketPostDto {
 	private String content;
 	private String filename;
 	
-	public MarketPostDto(String pk_user, String title, int price, String content, String filename) {
-		this.pk_user= pk_user;
-		this.title= title;
-		this.price= price;
-		this.content= content;
-		this.filename= filename;
-	}
+//	public MarketPostDto(String pk_user, String title, int price, String content, String filename) {
+//		this.pk_user= pk_user;
+//		this.title= title;
+//		this.price= price;
+//		this.content= content;
+//		this.filename= filename;
+//	}
 	
 	public String getPk_user() {
 		return pk_user;

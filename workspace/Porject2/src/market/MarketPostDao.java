@@ -14,7 +14,7 @@ public class MarketPostDao {
 	// 등록
 	public int insertMarketPost(MarketPostDto marketDto) throws Exception{
 		SqlSession sqlSession= factory.openSession();
-		int insertMarketPost= sqlSession.insert("marketDto", marketDto);
+		int insertMarketPost= sqlSession.insert("insertMarketPost", marketDto);
 		if(insertMarketPost>0) {
 			sqlSession.commit();
 		}else {
@@ -24,16 +24,31 @@ public class MarketPostDao {
 		return insertMarketPost;
 	}
 	
-	
-	
-	public List<MarketPostDto> selectMarketPost() throws Exception{
+	// 목록 출력
+	public List<MarketPostDto> selectMarketPostList() throws Exception{
 		
 		SqlSession sqlSession= factory.openSession();
 		
-		List<MarketPostDto> marketPostList= sqlSession.selectList("selectMarketPostAll");
+		List<MarketPostDto> marketPostList= sqlSession.selectList("marketPostList");
 		sqlSession.close();
 		return marketPostList;
 	}
+	
+	// 상세보기
+	public List<MarketPostDto> selectMarketPostOne() throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		
+		List<MarketPostDto> marketPostDetail= sqlSession.selectList("selectMarketPostOne");
+		sqlSession.close();
+		return marketPostDetail;
+	}
+	
+	// 수정
+	
+	// 삭제
+	
+	// 검색
 	
 
 }
