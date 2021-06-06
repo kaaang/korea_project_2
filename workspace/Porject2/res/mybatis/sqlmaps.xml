@@ -18,12 +18,29 @@
 		insert into user(id, pass, name, phone,email,birth,user_nickname) 
     	values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
     </insert>
-    <!---------------------------------- 진아 ---------------------------------->
+    <!-- 진아 -->
     <insert id="MarketDao" parameterType="market.MarketPostDto">
 		insert into usermarket(pk_user, title, price, content, filename) 
     	values(#{pk_user},#{title},#{price},#{content},#{filename})
     </insert>
     <select id="selectMarketPostAll" resultType="market.MarketPostDto">
         select * from usermarket
+    </select>
+    
+    <!-- 태영 --> 
+    <insert id="BookingDao" parameterType="reservation.BookingDto">
+		insert into booking(pk_booking, pk_wanted, pk_user, pk_mybike, pk_company,book_date, price, memo, regdate) 
+    	values(#{pk_booking},#{pk_wanted},#{pk_user},#{pk_mybike},#{pk_company},#{book_date},#{price},#{memo},#{regdate})
+    </insert>
+    <select id="selectbookingAll" resultType="reservation.BookingDto">
+        select * from booking
+    </select>
+    
+    <insert id="CompanyDao" parameterType="company.CompanyDto">
+		insert into company(pk_booking, pk_wanted, pk_user, pk_mybike, pk_company,book_date, price, memo, regdate) 
+    	values(#{pk_booking},#{pk_wanted},#{pk_user},#{pk_mybike},#{pk_company},#{book_date},#{price},#{memo},#{regdate})
+    </insert>
+    <select id="selectbookingAll" resultType="company.CompanyDto">
+        select * from booking
     </select>
 </mapper>

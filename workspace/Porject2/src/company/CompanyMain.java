@@ -10,10 +10,19 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,14 +32,14 @@ import javax.swing.table.AbstractTableModel;
 
 import main.AppMain;
 import main.Page;
-//import reservation.BookingDao;
+import market.FileManager;
 
 public class CompanyMain extends Page{
-	   
-	   // 서쪽
+	// 서쪽
 	   JPanel p_west;
 	   JButton bt_regist;
 	   JTextField t_title;
+	   JTextField t_user;
 	   JTextField t_price;
 	   JTextArea t_detail;
 	   JScrollPane scroll;
@@ -41,7 +50,7 @@ public class CompanyMain extends Page{
 	   JButton bt_del;
 	   
 	   // 센터
-	   JPanel p_center;
+	   JPanel p_center; 
 	   JPanel p_search; // 검색 컴포넌트 올려두는 패널
 	   Choice ch_category; // 검색 카테고리
 	   JTextField t_keyword; // 검색어입력
@@ -52,22 +61,21 @@ public class CompanyMain extends Page{
 	   // 캔버스의 사진
 	   Toolkit kit= Toolkit.getDefaultToolkit();
 	   Image image;
-	   JFileChooser chooser;
+	   JFileChooser chooser = new JFileChooser("D:\\TeamProject\\workspace\\Porject2\\res"); // 파일 탐색기
 	   String filename; // 유저의 복사에 의해 생성된 파일명
-	   // 테이블컬럼명addr
-
-	   String[] columns= {"addr", "comp_id", "comp_pass", "introduce", "pk_company", "tel"}; // 컬럼배열
+	   // 테이블
+	   String[] columns= {"book_date", "memo ", "pk_booking", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
 	   String[][] records= {};// 레코드 배열
-	   
 
-	      
+	   
 	   public CompanyMain(AppMain appMain) {
 	      super(appMain);
 	      // -----------------------------------------------[생성]
 	      // 서쪽 관련
 	      p_west= new JPanel();
-	      bt_regist= new JButton("답변 등록");
+	      bt_regist= new JButton("상품 예약");
 	      t_title= new JTextField();
+	      t_user= new JTextField();
 	      t_price= new JTextField();
 	      t_detail= new JTextArea();
 	      scroll= new  JScrollPane(t_detail);
@@ -134,9 +142,9 @@ public class CompanyMain extends Page{
 	      
 	      // 서쪽
 	      p_west.setPreferredSize(new Dimension(200, 700));
-	      scroll.setPreferredSize(new Dimension(180, 180));
+	      scroll.setPreferredSize(new Dimension(180, 180));  
 	      can.setPreferredSize(new Dimension(180, 180));
-	      can.setBackground(Color.GREEN);
+	      can.setBackground(Color.PINK);
 	      
 	      t_title.setPreferredSize(d);
 	      t_price.setPreferredSize(d);
@@ -148,9 +156,11 @@ public class CompanyMain extends Page{
 	      t_keyword.setPreferredSize(new Dimension(450, 30));
 	      
 	      // -----------------------------------------------[조립]
+	      
 	      // 서쪽
 	      p_west.add(bt_regist);
 	      p_west.add(t_title);
+	      p_west.add(t_user);
 	      p_west.add(t_price);
 	      p_west.add(t_detail);
 	      p_west.add(scroll);
@@ -170,98 +180,180 @@ public class CompanyMain extends Page{
 	      add(p_center);
 	      
 	      
+
+	      
+	      
+	      
 	      // -----------------------------------------------[리스너]
-	      
-	      
-	      bt_regist.addActionListener(new ActionListener() {
-	       public void actionPerformed(ActionEvent e) {
-	          regist();
+//	      addWindowListener(new WindowAdapter() {
+//				public void windowClosing(WindowEvent e) {
+//					disConnect(); //DB 접속해제
+//					System.exit(0); //kill process
+//				}
+//			});
+//	      
+	     bt_regist.addActionListener(new ActionListener() {
+	      public void actionPerformed(ActionEvent e) {
+	         regist();
 
-	       }
-	    });
-	      
-	      bt_edit.addActionListener(new ActionListener() {
-	         public void actionPerformed(ActionEvent e) {
-	            edit();
-	         }
-	      });
-	      
-	      bt_del.addActionListener(new ActionListener() {
-	         public void actionPerformed(ActionEvent e) {
-	            delete();
-	         }
-	      });
-	      
-	      bt_search.addActionListener(new ActionListener() {
-	         public void actionPerformed(ActionEvent e) {
-	            search();
-	         }
-	      });
-	      
-	      bt_web.addActionListener(new ActionListener() {
-	         public void actionPerformed(ActionEvent e) {
-	            webfind();
-	         }
-	      });
-	      
-	      bt_file.addActionListener(new ActionListener() {
-	         public void actionPerformed(ActionEvent e) {
-	            filefind();
-	         }
-	      });
-	  
-	      
-	      
+	      }
+	   });
+	     
+	     bt_edit.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	           edit();
+	        }
+	     });
+	     
+	     bt_del.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	           delete();
+	        }
+	     });
+	     
+	     bt_search.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	           search();
+	        }
+	     });
+	     
+	     bt_web.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	           webfind();
+	        }
+	     });
+	     
+	     bt_file.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	           filefind();
+	        }
+	     });
+	   }
+	 
+	     
+	     
 
-	      
-	      
-	    }
-	    
-	    public void regist() {
-	       System.out.println("상품을 예약하셨습니다.");
-	    }
-	    
-	    public void delete() {
-	       System.out.println("상품을 삭제하셨습니다.");
-	    }
-	    
-	    public void edit() {
-	       System.out.println("상품을 수정하셨습니다.");
-	    }
-	    public void search() {
-	       System.out.println("상품을 검색하셨습니다.");
-	    }
-	    public void webfind() {
-	       System.out.println("웹에서 검색하는 중입니다..");
-	    }
-	    public void filefind() {
-	       System.out.println("내컴퓨터에서 검색하는 중입니다.");
-	    }
-//	    public void refresh() {
-//	 	   BookingDao conn=new BookingDao();
-//	 	   
-//	 	   List<CompanyDto> list;
-//	 	try {
-//	 		list = conn.CompanySelect();
-//	 		
-//	 		System.out.println(list.get(1).getAddr());
-//	 		System.out.println(list.get(1).getComp_id());
-//	 		System.out.println(list.get(1).getComp_pass());
-//	 		System.out.println(list.get(1).getIntroduce());
-//	 		System.out.println(list.get(1).getPk_company());
-//	 		System.out.println(list.get(1).getTel());
-//
-//	 		
-//	 	} catch (Exception e) {
-//
-//	 		e.printStackTrace();
-//	 	}
-//	 	   
-//	    }
-	    
+	     
+	     
 	  
-	    
-	    
+	   
+
+				
+	   
+	 
+	   
+	   public void regist() {
+	      System.out.println("상품을 예약하셨습니다.");
+	   }
+	   
+	   public void delete() {
+	      System.out.println("상품을 삭제하셨습니다.");
+	   }
+	   
+	   public void edit() {
+	      System.out.println("상품을 수정하셨습니다.");
+	   }
+	   public void search() {
+	      System.out.println("상품을 검색하셨습니다.");
+	   }
+	   
+	   // 웹에서 사진 올리기
+	   public void webfind() {
+		   String path= JOptionPane.showInputDialog(this.getAppMain(),"경로 입력");
+		   URL url= null;
+		   HttpURLConnection httpCon= null;
+		   InputStream is= null;
+		   FileOutputStream fos= null;
+		   
+		   try {
+			url= new URL(path);
+			httpCon= (HttpURLConnection)url.openConnection();
+			httpCon.setRequestMethod("GET");
+			
+			is= httpCon.getInputStream();
+			long time= System.currentTimeMillis();
+			filename= time+"."+FileManager.getExtend(path,"/");
+			fos= new FileOutputStream("D:\\project2\\workspace\\Porject2\\res\\"+filename);
+			
+			int data= -1;
+			while(true) {
+				data= is.read();
+				if(data== -1) break;
+				fos.write(data);
+			}
+			JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			if(fos!=null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(is!=null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} 
+	   }
+	   
+	   // 내장 폴더에서 사진 올리기
+	   public void filefind() {
+		   FileInputStream fis=null;
+		   FileOutputStream fos= null;
+		   
+		   if(chooser.showOpenDialog(this.getAppMain())== JFileChooser.APPROVE_OPTION) {
+			   File file= chooser.getSelectedFile();
+			   image= kit.getImage(file.getAbsolutePath());
+			   can.repaint();
+			   
+			   try {
+				fis= new FileInputStream(file);
+				long time= System.currentTimeMillis();
+				filename= time+"."+FileManager.getExtend(file.getAbsolutePath(),"\\");
+				fos= new FileOutputStream("D:\\project2\\workspace\\Porject2\\res\\"+filename);
+				
+				int data= -1;
+				byte[] buff= new byte[1024];
+				while(true) {
+					data= fis.read(buff);
+					if(data== -1)break;
+					fos.write(buff);
+				}
+				JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+			   } catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally {
+				if(fos!= null) {
+					try {
+						fos.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if(fis!= null) {
+					try {
+						fis.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			   
+		   } 
+	   }
+	   
+	   
+	   
 
 	    
 	   }

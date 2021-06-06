@@ -51,7 +51,7 @@ public class ReservationUnanswered extends Page{
    // 캔버스의 사진
    Toolkit kit= Toolkit.getDefaultToolkit();
    Image image;
-   JFileChooser chooser;
+   JFileChooser chooser = new JFileChooser("D:\\TeamProject\\workspace\\Porject2\\res"); // 파일 탐색기
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
    String[] columns= {"book_date", "memo ", "pk_booking ", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
@@ -60,7 +60,6 @@ public class ReservationUnanswered extends Page{
 
    public ReservationUnanswered(AppMain appMain) {
       super(appMain);
-      // -----------------------------------------------[생성]
       // 서쪽 관련
       p_west= new JPanel();
       bt_regist= new JButton("답변 등록");
