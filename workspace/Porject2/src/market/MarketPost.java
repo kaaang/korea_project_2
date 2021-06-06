@@ -276,7 +276,7 @@ public class MarketPost extends Page{
    }
    // 목록 보기
    public void selectMarketPostList() {
-	   
+	   System.out.println("보이냐");
 	   table.updateUI();
    }
    
