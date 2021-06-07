@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import login.LoginDto;
 import util.Mybatis;
 
 
@@ -26,14 +25,12 @@ public class MarketPostDao {
 	}
 	
 	// 목록 출력
-	public List<MarketPostDto> selectMarketPostList() throws Exception{
-		
-		SqlSession sqlSession= factory.openSession();
-		
-		List<MarketPostDto> selectMarketPostList= sqlSession.selectList("selectMarketPostList");
-		sqlSession.close();
-		return selectMarketPostList;
-	}
+    public List<MarketPostDto> selectMarketPostList() throws Exception {
+    	SqlSession sqlSession= factory.openSession();
+        List<MarketPostDto> selectMarketPostList = sqlSession.selectList("selectMarketPostList");
+        sqlSession.close();
+        return selectMarketPostList;
+    }
 	
 	// 상세보기
 	public List<MarketPostDto> selectMarketPostOne() throws Exception{

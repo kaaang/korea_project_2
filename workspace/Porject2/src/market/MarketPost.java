@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -59,6 +60,8 @@ public class MarketPost extends Page{
    
    JTable table;
    JScrollPane scroll_table;
+   
+   Thread thread;
    // 캔버스의 사진
    Toolkit kit= Toolkit.getDefaultToolkit();
    Image image;
@@ -68,8 +71,7 @@ public class MarketPost extends Page{
    String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
     
-   MarketPostDto marketDto= new MarketPostDto();
-   MarketPostDao marketDao= new MarketPostDao();
+
    
    public MarketPost(AppMain appMain) {
       super(appMain);
@@ -85,8 +87,7 @@ public class MarketPost extends Page{
       bt_web= new JButton("웹에서 파일 찾기");
       bt_file= new JButton("내 컴퓨터에서 파일 찾기");
       
-      // 내부익명 클래스는 외부클래스의 멤버변수, 메소드를 접근가능.
-      can= new Canvas() { // {}붙으며 extends효과
+      can= new Canvas() { 
          public void paint(Graphics g) {
             g.drawImage(image, 0, 0, 180, 180, can);
          }
@@ -137,7 +138,6 @@ public class MarketPost extends Page{
             }
          }
       });
-      
       scroll_table= new JScrollPane(table);
       // -----------------------------------------------[스타일, 레이아웃]
       // 공통크기
@@ -182,7 +182,13 @@ public class MarketPost extends Page{
       p_center.add(scroll_table);
       add(p_center);
       
-     
+      
+      thread = new Thread() {
+          public void run() {
+        	  selectMarketPostList();
+          }
+      };
+      thread.start();
       // -----------------------------------------------[리스너]
       // 이미지- 웹
       bt_web.addActionListener(new ActionListener() {
@@ -218,15 +224,15 @@ public class MarketPost extends Page{
       // 수정
       bt_edit.addActionListener(new ActionListener() {
   		public void actionPerformed(ActionEvent e) {
-  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
-				
+  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "수정 하시겠습니까?")== JOptionPane.OK_OPTION){
+  				updateMarketPost();
   			}
   		}
   	});
       // 삭제
       bt_del.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-	  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+	  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "삭제 하시겠습니까?")== JOptionPane.OK_OPTION){
 					
 	  			}
     		}
@@ -241,21 +247,24 @@ public class MarketPost extends Page{
       // 테이블 연결
       table.addMouseListener(new MouseAdapter() {
 		public void mouseReleased(MouseEvent e) {
-			selectMarketPostList();
+			updateTable();
 		}
 	});
+
       // 생성자 호출
    }
    // -------------------------------------------------------------------[메소드]
    // 상품 등록(사진 유/무 둘다 업로드 가능)
    public void insertMarketPost() {
+	   MarketPostDto marketDto= new MarketPostDto();
 	   marketDto.setPk_user(t_user.getText());
 	   marketDto.setTitle(t_title.getText());
-	   marketDto.setPrice(Integer.parseInt(t_price.getText()));
+	   marketDto.setPrice(t_price.getText());
 	   marketDto.setContent(t_detail.getText());
 	   marketDto.setFilename(filename);
+	   MarketPostDao marketDao= new MarketPostDao();
 	   try {
-		int result= marketDao.insertMarketPost(marketDto);
+		   int result= marketDao.insertMarketPost(marketDto);
 		if(result>0) {
 			JOptionPane.showMessageDialog(this.getAppMain(), "등록 완료");
 		}else {
@@ -265,15 +274,18 @@ public class MarketPost extends Page{
 		e.printStackTrace();
 	}
    }
-   //---------------------------------------------- 화면이 보여야 수정 삭제를 확인 할 수 있음
    // 수정
    public void updateMarketPost() {
-	   int pk_usermarket= Integer.parseInt((String)table.getValueAt(table.getSelectedRow(), 0));
+	   MarketPostDto marketDto= new MarketPostDto();
+	   String pk_usermarket=(String)table.getValueAt(table.getSelectedRow(), 0);
+	   marketDto.setPk_usermarket(pk_usermarket);
 	   marketDto.setTitle(t_title.getText());
-	   marketDto.setPrice(Integer.parseInt(t_price.getText()));
+	   marketDto.setPrice(t_price.getText());
 	   marketDto.setContent(t_detail.getText());
 	   marketDto.setFilename(filename);
-	   marketDto.setPk_usermarket(pk_usermarket);
+	   MarketPostDao marketDao= new MarketPostDao();
+	   image= kit.getImage("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
+	   can.repaint();
 	   try {
 			int result= marketDao.updateMarketPost(marketDto);
 			if(result>0) {
@@ -285,16 +297,51 @@ public class MarketPost extends Page{
 			e.printStackTrace();
 		}	
    }
+   
    // 삭제
    public void edit() {
 
 	
    }
-   // 목록 보기 ----> 문제: 어떻게 받아야할지 모르겠음 공부 필요
+   // 목록 보기
    public void selectMarketPostList() {
-	  marketDto.setPk_usermarket((int)table.getValueAt(table.getSelectedRow(), 0));
+	   MarketPostDao marketDao= new MarketPostDao();
+	   try {
+           List<MarketPostDto> selectMarketPostList = marketDao.selectMarketPostList();
+           showtable(selectMarketPostList);
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
    }
-   
+   public void showtable(List<MarketPostDto> selectMarketPostList){
+
+       String[][] data = new String[selectMarketPostList.size()][columns.length];
+
+       int index = 0;
+       while (index < selectMarketPostList.size()) {
+           data[index][0] = selectMarketPostList.get(index).getPk_usermarket();
+           data[index][1] = selectMarketPostList.get(index).getId();
+           data[index][2] = selectMarketPostList.get(index).getTitle();
+           data[index][3] = selectMarketPostList.get(index).getPrice();
+           data[index][4] = selectMarketPostList.get(index).getContent();
+           data[index][5] = selectMarketPostList.get(index).getRegdate();
+           index++;
+       }
+
+       records = data;
+
+       table.updateUI();
+   }
+   // 상세	보기
+   private void updateTable(){
+	   MarketPostDto marketDto= new MarketPostDto();
+	   t_title.setText((String) table.getValueAt(table.getSelectedRow(), 2));
+	   t_user.setText((String) table.getValueAt(table.getSelectedRow(), 1));
+	   t_price.setText((String) table.getValueAt(table.getSelectedRow(), 3));
+	   t_detail.setText((String) table.getValueAt(table.getSelectedRow(), 4));
+	   image= kit.getImage("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
+	   can.repaint();  
+  }
    // -------------------------------------------------------------------[이미지 등록]
    // 웹에서 사진 올리기
    public void imgWeb() {

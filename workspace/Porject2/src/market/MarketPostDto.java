@@ -1,20 +1,30 @@
 package market;
 
 public class MarketPostDto {
-	private int pk_usermarket;
+	private String pk_usermarket;
 	private String pk_user;
 	private String title;
-	private int price;
+	private String price;
 	private String content;
 	private String filename;
 	private String regdate;
+	private String id;
 	
 	
 	
-	public int getPk_usermarket() {
+
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getPk_usermarket() {
 		return pk_usermarket;
 	}
-	public void setPk_usermarket(int pk_usermarket) {
+	public void setPk_usermarket(String pk_usermarket) {
 		this.pk_usermarket = pk_usermarket;
 	}
 	
@@ -32,12 +42,13 @@ public class MarketPostDto {
 		this.title = title;
 	}
 	
-	public int getPrice() {
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
+
 	
 	public String getContent() {
 		return content;
