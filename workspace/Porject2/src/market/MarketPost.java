@@ -65,9 +65,11 @@ public class MarketPost extends Page{
    JFileChooser chooser= new JFileChooser("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res");
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
-   String[] columns= {"pk_usermarket", "pk_user ", "title ", "price ", "regdate"}; // 컬럼배열
+   String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
     
+   MarketPostDto marketDto= new MarketPostDto();
+   MarketPostDao marketDao= new MarketPostDao();
    
    public MarketPost(AppMain appMain) {
       super(appMain);
@@ -149,8 +151,9 @@ public class MarketPost extends Page{
       can.setBackground(Color.DARK_GRAY);
       
       t_title.setPreferredSize(d);
+      t_user.setPreferredSize(d);
       t_price.setPreferredSize(d);
-      t_detail.setPreferredSize(d);
+
       
       // 센터
       p_center.setLayout(new BorderLayout());
@@ -163,7 +166,6 @@ public class MarketPost extends Page{
       p_west.add(t_title);
       p_west.add(t_user);
       p_west.add(t_price);
-      p_west.add(t_detail);
       p_west.add(scroll);
       p_west.add(bt_web);
       p_west.add(bt_file);
@@ -202,6 +204,7 @@ public class MarketPost extends Page{
 				Integer.parseInt(t_price.getText());				
 				if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
 					insertMarketPost();
+					selectMarketPostList();
 				}
 			}catch(NumberFormatException e1){
 				JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "가격은 숫자만 입력 가능합니다.");
@@ -238,40 +241,45 @@ public class MarketPost extends Page{
       // 테이블 연결
       table.addMouseListener(new MouseAdapter() {
 		public void mouseReleased(MouseEvent e) {
-			
+			selectMarketPostList();
 		}
 	});
       // 생성자 호출
    }
    // -------------------------------------------------------------------[메소드]
-   // 상품 등록
+   // 상품 등록(사진 유/무 둘다 업로드 가능)
    public void insertMarketPost() {
-	   String user= t_user.getText();
-	   String title= t_title.getText();
-	   int price= Integer.parseInt(t_price.getText());
-	   String content= t_detail.getText();
-//	   String filename= filename; 어떻게 처리할지 고민
-	   
-	   MarketPostDto marketDto= new MarketPostDto(user, title, price, content, filename);
-	   MarketPostDao marketDao= new MarketPostDao();
-	   
+	   marketDto.setPk_user(t_user.getText());
+	   marketDto.setTitle(t_title.getText());
+	   marketDto.setPrice(Integer.parseInt(t_price.getText()));
+	   marketDto.setContent(t_detail.getText());
+	   marketDto.setFilename(filename);
 	   try {
 		int result= marketDao.insertMarketPost(marketDto);
 		if(result>0) {
 			JOptionPane.showMessageDialog(this.getAppMain(), "등록 완료");
+		}else {
+			JOptionPane.showMessageDialog(this.getAppMain(), "등록 실패");
 		}
 	} catch (Exception e) {
 		e.printStackTrace();
-		
 	}
    }
+   // 수정
    public void regist() {
 	   
    }
+   // 삭제
    public void edit() {
 
 	
    }
+   // 목록 보기
+   public void selectMarketPostList() {
+	   
+	   table.updateUI();
+   }
+   
    // -------------------------------------------------------------------[이미지 등록]
    // 웹에서 사진 올리기
    public void imgWeb() {
@@ -288,7 +296,7 @@ public class MarketPost extends Page{
 		
 		is= httpCon.getInputStream();
 		long time= System.currentTimeMillis();
-		filename= time+"."+FileManager.getExtend(path,"/");
+		filename= time+"."+FileManager.getExtend(path,".");
 		fos= new FileOutputStream("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
 		
 		int data= -1;
