@@ -70,11 +70,13 @@ public class MarketPost extends Page{
    // 테이블
    String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate", "filename"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
-    LoginDto user;
+   LoginDto user;
 
-   
+    AppMain main;
+    
    public MarketPost(AppMain appMain) {
       super(appMain);
+      this.main = appMain;
       this.user= appMain.getUser();
       // -----------------------------------------------[생성]
       // 서쪽 관련
@@ -188,6 +190,8 @@ public class MarketPost extends Page{
           }
       };
       thread.start();
+      
+ 
       // -----------------------------------------------[리스너]
       // 이미지- 웹
       bt_web.addActionListener(new ActionListener() {
@@ -206,10 +210,9 @@ public class MarketPost extends Page{
 		public void actionPerformed(ActionEvent e) {
 			try {
 				// 유효성 체크
-				Integer.parseInt(t_price.getText());				
+				Integer.parseInt(t_price.getText());		
 				if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
 					insertMarketPost();
-					selectMarketPostList();
 				}
 			}catch(NumberFormatException e1){
 				JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "가격은 숫자만 입력 가능합니다.");
@@ -365,11 +368,9 @@ public class MarketPost extends Page{
    // 상품 등록(사진 유/무 둘다 업로드 가능)
    public void insertMarketPost() {
 	   // id 받기
-	   
-	   
 	   MarketPostDto marketDto= new MarketPostDto();
-//	   marketDto.setPk_user(user.getPK_user);
 	   marketDto.setTitle(t_title.getText());
+	   marketDto.setPk_user(Integer.toString(main.getUser().getPk_user()));
 	   marketDto.setPrice(t_price.getText());
 	   marketDto.setContent(t_detail.getText());
 	   marketDto.setFilename(filename);
@@ -378,6 +379,7 @@ public class MarketPost extends Page{
 		   int result= marketDao.insertMarketPost(marketDto);
 		if(result>0) {
 			JOptionPane.showMessageDialog(this.getAppMain(), "등록 완료");
+			selectMarketPostList();
 		}else {
 			JOptionPane.showMessageDialog(this.getAppMain(), "등록 실패");
 		}
@@ -464,7 +466,6 @@ public class MarketPost extends Page{
    }
    // 상세	보기
    private void updateTable(){
-	   MarketPostDto marketDto= new MarketPostDto();
 	   t_title.setText((String) table.getValueAt(table.getSelectedRow(), 2));
 	   t_price.setText((String) table.getValueAt(table.getSelectedRow(), 3));
 	   t_detail.setText((String) table.getValueAt(table.getSelectedRow(), 4));
