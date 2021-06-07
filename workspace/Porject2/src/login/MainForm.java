@@ -60,7 +60,7 @@ public class MainForm extends JFrame{
 		
 		p_west.setPreferredSize(new Dimension(1000, 800));
 		p_west.setBackground(Color.DARK_GRAY);
-		ImagePanel panel = new ImagePanel(new ImageIcon("D:\\korea_project_2\\workspace\\Porject2\\res\\img.jpg").getImage());
+		ImagePanel panel = new ImagePanel(new ImageIcon(getClass().getClassLoader().getResource("img.jpg")).getImage());
 		p_west.add(panel);
 		pack();
 		
@@ -108,7 +108,8 @@ public class MainForm extends JFrame{
 			db_pass = memberDto.getPass();
 			if(input_id.equals(db_id) && input_pass.equals(db_pass)) {
 				appMain.setVisible(true);
-				MainForm.this.setVisible(false);				
+				appMain.setUser(memberDto);
+				MainForm.this.setVisible(false);
 			}else {
 				failLogin();
 			}

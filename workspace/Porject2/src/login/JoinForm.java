@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class JoinForm extends JPanel{
@@ -32,7 +33,7 @@ public class JoinForm extends JPanel{
 	
 	JTextField t_id;
 	JTextField t_nick;
-	JTextField t_pass;
+	JPasswordField t_pass;
 	JTextField t_name;
 	JTextField t_phone;
 	JTextField t_email;
@@ -48,6 +49,11 @@ public class JoinForm extends JPanel{
 	boolean logincheck=false;
 	boolean nickcheck=false;
 	
+	JLabel l_pass_check;
+	JPasswordField t_pass_check;
+	JLabel l_pass_info;
+	
+	boolean b_pass=false;
 	
 	
 
@@ -68,7 +74,7 @@ public class JoinForm extends JPanel{
 		
 		t_id = new JTextField(20);
 		t_nick = new JTextField(20);
-		t_pass = new JTextField(20);
+		t_pass = new JPasswordField(20);
 		t_name = new JTextField(20);
 		t_phone = new JTextField(20);
 		t_email = new JTextField(20);
@@ -80,6 +86,11 @@ public class JoinForm extends JPanel{
 		id_info = new JLabel("ID는 4자리 이상 입력하세요.");
 		nick_info = new JLabel("닉네임을 입력하세요.");
 		
+		l_pass_check = new JLabel("PASS Check");
+		t_pass_check = new JPasswordField(20);
+		l_pass_info = new JLabel("비밀번호가 일치하지 않습니다.");
+		
+		
 		
 	
 		l_id.setPreferredSize(new Dimension(100, 30));
@@ -88,6 +99,9 @@ public class JoinForm extends JPanel{
 		l_phone.setPreferredSize(new Dimension(100, 30));
 		l_email.setPreferredSize(new Dimension(100, 30));
 		l_ymd.setPreferredSize(new Dimension(100, 30));
+		l_pass_check.setPreferredSize(new Dimension(100, 30));
+		
+		
 		ymd.setPreferredSize(new Dimension(380, 30));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		id_info.setPreferredSize(new Dimension(380, 30));
@@ -95,13 +109,15 @@ public class JoinForm extends JPanel{
 		nick_info.setPreferredSize(new Dimension(380, 30));
 		nick_info.setHorizontalAlignment(JLabel.CENTER);
 		l_nick.setPreferredSize(new Dimension(100, 30));
+		l_pass_info.setHorizontalAlignment(JLabel.CENTER);
+		l_pass_info.setPreferredSize(new Dimension(380, 30));
 		
 		join.setPreferredSize(new Dimension(130, 40));
 		cancel.setPreferredSize(new Dimension(130, 40));
 		
 		nul.setPreferredSize(new Dimension(380,200));
 		nul.setBackground(Color.gray);
-		nul2.setPreferredSize(new Dimension(380,100));
+		nul2.setPreferredSize(new Dimension(380,70));
 		nul2.setBackground(Color.gray);
 		
 		
@@ -118,6 +134,11 @@ public class JoinForm extends JPanel{
 				nick_check();
 			}
 		});
+		t_pass_check.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				pass_check();
+			}
+		});
 		
 		
 		
@@ -132,16 +153,20 @@ public class JoinForm extends JPanel{
 		
 		
 		
+		
 		add(l_pass);
 		add(t_pass);
 		
+		add(l_pass_check);
+		add(t_pass_check);
+		add(l_pass_info);
+		
+		add(l_name);
+		add(t_name);
 		
 		add(l_nick);
 		add(t_nick);
 		add(nick_info);
-		
-		add(l_name);
-		add(t_name);
 		
 		add(l_phone);
 		add(t_phone);
@@ -164,7 +189,7 @@ public class JoinForm extends JPanel{
 		
 		
 		join.addActionListener(new ActionListener() {
-			String db_pass = t_pass.getText();
+			String db_pass = new String(t_pass.getPassword());
 			String db_name = t_name.getText();
 			String db_phone = t_phone.getText();
 			String db_email = t_email.getText();
@@ -172,9 +197,13 @@ public class JoinForm extends JPanel{
 			
 			
 			
+			
 			public void actionPerformed(ActionEvent e) {
 				if(db_pass.equals("") || db_name.equals("") || db_phone.equals("") || db_email.equals("") || db_ymd.equals("")) {
 					JOptionPane.showMessageDialog(main, "모든 정보를 입력해주세요");
+					return;
+				}else if(b_pass==false) {
+					JOptionPane.showMessageDialog(main, "비밀번호 일치 여부를 확인하세요.");
 					return;
 				}else {
 					if(logincheck==true && nickcheck==true) {
@@ -203,7 +232,7 @@ public class JoinForm extends JPanel{
 	public void insertJoin() {
 		String db_id = t_id.getText();
 		String db_nick = t_nick.getText();
-		String db_pass = t_pass.getText();
+		String db_pass = new String(t_pass.getPassword());
 		String db_name = t_name.getText();
 		String db_phone = t_phone.getText();
 		String db_email = t_email.getText();
@@ -289,7 +318,20 @@ public class JoinForm extends JPanel{
 	
 	
 	
-	
+	public void pass_check() {
+		String pass = new String(t_pass.getPassword());
+		String pass2 = new String(t_pass_check.getPassword());
+		
+		if(pass.equals(pass2)) {
+			l_pass_info.setText("비밀번호가 일치합니다.");
+			b_pass=true;
+		}else {
+			JOptionPane.showMessageDialog(main, "비밀번호가 일치하지 않습니다.");
+			l_pass_info.setText("비밀번호가 일치하지 않습니다.");
+			t_pass.requestFocus();
+			return;
+		}
+	}
 	
 	
 	

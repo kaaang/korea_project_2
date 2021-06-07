@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import bike.Bike;
 import company.CompanyMain;
 import customer.CustomerCenter;
+import login.LoginDto;
 import market.MarketLog;
 import market.MarketPost;
 import market.MarketReview;
@@ -43,7 +44,10 @@ public class AppMain extends JFrame implements ActionListener{
 	
 	Page[] pages = new Page[12];
 	
+	LoginDto user = new LoginDto();
+	
 	public AppMain() {
+		System.out.println();
 		p_west = new JPanel();
 		p_top = new JPanel();
 		p_sub = new JPanel();
@@ -163,6 +167,10 @@ public class AppMain extends JFrame implements ActionListener{
 				pages[i].setVisible(false);				
 			}
 		}
+	}
+	
+	public void setUser(LoginDto user) {
+		this.user=user;
 	}
 	
 	
