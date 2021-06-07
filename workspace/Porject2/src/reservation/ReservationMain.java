@@ -10,12 +10,15 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -29,12 +32,14 @@ import javax.swing.table.AbstractTableModel;
 
 import main.AppMain;
 import main.Page;
+import market.FileManager;
 
-public class ReservationMain extends Page{
+public class ReservationMain extends Page {
    // 서쪽
    JPanel p_west;
    JButton bt_regist;
    JTextField t_title;
+   JTextField t_user;
    JTextField t_price;
    JTextArea t_detail;
    JScrollPane scroll;
@@ -56,16 +61,12 @@ public class ReservationMain extends Page{
    // 캔버스의 사진
    Toolkit kit= Toolkit.getDefaultToolkit();
    Image image;
-   JFileChooser chooser;
+   JFileChooser chooser = new JFileChooser("D:\\TeamProject\\workspace\\Porject2\\res"); // 파일 탐색기
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
    String[] columns= {"book_date", "memo ", "pk_booking", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
-   
 
-   private Connection con;
-      
-//   ArrayList<ChCategory> OneList=new ArrayList<ChCategory>();
    
    public ReservationMain(AppMain appMain) {
       super(appMain);
@@ -74,6 +75,7 @@ public class ReservationMain extends Page{
       p_west= new JPanel();
       bt_regist= new JButton("상품 예약");
       t_title= new JTextField();
+      t_user= new JTextField();
       t_price= new JTextField();
       t_detail= new JTextArea();
       scroll= new  JScrollPane(t_detail);
@@ -134,7 +136,6 @@ public class ReservationMain extends Page{
       
       scroll_table= new JScrollPane(table);
       // -----------------------------------------------[스타일, 레이아웃]
-      
       // 공통크기
       Dimension d= new Dimension(180, 30); 
       setLayout(new BorderLayout());
@@ -159,6 +160,7 @@ public class ReservationMain extends Page{
       // 서쪽
       p_west.add(bt_regist);
       p_west.add(t_title);
+      p_west.add(t_user);
       p_west.add(t_price);
       p_west.add(t_detail);
       p_west.add(scroll);
@@ -178,13 +180,18 @@ public class ReservationMain extends Page{
       add(p_center);
       
       
-      
-     
+
       
       
       
       // -----------------------------------------------[리스너]
-      
+//      addWindowListener(new WindowAdapter() {
+//			public void windowClosing(WindowEvent e) {
+//				disConnect(); //DB 접속해제
+//				System.exit(0); //kill process
+//			}
+//		});
+//      
      bt_regist.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
          regist();
@@ -221,13 +228,19 @@ public class ReservationMain extends Page{
            filefind();
         }
      });
+   }
  
      
      
 
      
      
-   }
+  
+   
+
+			
+   
+ 
    
    public void regist() {
       System.out.println("상품을 예약하셨습니다.");
@@ -243,37 +256,102 @@ public class ReservationMain extends Page{
    public void search() {
       System.out.println("상품을 검색하셨습니다.");
    }
-   public void webfind() {
-      System.out.println("웹에서 검색하는 중입니다..");
-   }
-   public void filefind() {
-      System.out.println("내컴퓨터에서 검색하는 중입니다.");
-   }
-//   public void refresh() {
-//	   BookingDao conn=new BookingDao();
-//	   
-//	   List<BookingDto> list;
-//	try {
-//		list = conn.BookingSelect();
-//		
-//		System.out.println(list.get(1).getMemo());
-//		System.out.println(list.get(1).getBook_date());
-//		System.out.println(list.get(1).getPk_booking());
-//		System.out.println(list.get(1).getPk_company());
-//		System.out.println(list.get(1).getPk_mybike());
-//		System.out.println(list.get(1).getPk_user());
-//		System.out.println(list.get(1).getPk_wanted());
-//		System.out.println(list.get(1).getPrice());
-//		System.out.println(list.get(1).getRegdate());
-//		
-//	} catch (Exception e) {
-//
-//		e.printStackTrace();
-//	}
-//	   
-//   }
    
- 
+   // 웹에서 사진 올리기
+   public void webfind() {
+	   String path= JOptionPane.showInputDialog(this.getAppMain(),"경로 입력");
+	   URL url= null;
+	   HttpURLConnection httpCon= null;
+	   InputStream is= null;
+	   FileOutputStream fos= null;
+	   
+	   try {
+		url= new URL(path);
+		httpCon= (HttpURLConnection)url.openConnection();
+		httpCon.setRequestMethod("GET");
+		
+		is= httpCon.getInputStream();
+		long time= System.currentTimeMillis();
+		filename= time+"."+FileManager.getExtend(path,"/");
+		fos= new FileOutputStream("D:\\project2\\workspace\\Porject2\\res\\"+filename);
+		
+		int data= -1;
+		while(true) {
+			data= is.read();
+			if(data== -1) break;
+			fos.write(data);
+		}
+		JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+	} catch (MalformedURLException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}finally {
+		if(fos!=null) {
+			try {
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(is!=null) {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	} 
+   }
+   
+   // 내장 폴더에서 사진 올리기
+   public void filefind() {
+	   FileInputStream fis=null;
+	   FileOutputStream fos= null;
+	   
+	   if(chooser.showOpenDialog(this.getAppMain())== JFileChooser.APPROVE_OPTION) {
+		   File file= chooser.getSelectedFile();
+		   image= kit.getImage(file.getAbsolutePath());
+		   can.repaint();
+		   
+		   try {
+			fis= new FileInputStream(file);
+			long time= System.currentTimeMillis();
+			filename= time+"."+FileManager.getExtend(file.getAbsolutePath(),"\\");
+			fos= new FileOutputStream("D:\\project2\\workspace\\Porject2\\res\\"+filename);
+			
+			int data= -1;
+			byte[] buff= new byte[1024];
+			while(true) {
+				data= fis.read(buff);
+				if(data== -1)break;
+				fos.write(buff);
+			}
+			JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+		   } catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			if(fos!= null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(fis!= null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		   
+	   } 
+   }
+   
    
    
 

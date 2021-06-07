@@ -1,7 +1,7 @@
 package reservation;
 
 public class BookingDto {
-	// alt + shift + s + r       ,    alt + a     ,     alt + r 
+	// alt + shift + s + r  ,   alt + a  ,    alt + r   ,  o  
 	private String book_date;
 	private String memo;
 	private int pk_booking;
