@@ -44,7 +44,7 @@ public class AppMain extends JFrame implements ActionListener{
 	
 	Page[] pages = new Page[12];
 	
-	LoginDto user = new LoginDto();
+	private LoginDto user = new LoginDto();
 	
 	public AppMain() {
 		System.out.println();
@@ -168,10 +168,15 @@ public class AppMain extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
-	public void setUser(LoginDto user) {
-		this.user=user;
+
+	public LoginDto getUser() {
+		return user;
 	}
+
+	public void setUser(LoginDto user) {
+		this.user = user;
+	}
+	
 	
 	
 
