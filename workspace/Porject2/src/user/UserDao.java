@@ -14,6 +14,7 @@ public class UserDao {
         SqlSession sqlSession = factory.openSession();
         List<UserDto> list = sqlSession.selectList("selectAllUser");
         sqlSession.close();
+        System.out.println("존잘신혁");
         return list;
     }
 
