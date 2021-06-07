@@ -10,6 +10,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -66,6 +68,9 @@ public class ReservationMain extends Page {
    // 테이블
    String[] columns= {"book_date", "memo ", "pk_booking", "pk_company", "pk_mybike","pk_user", "pk_wanted","price", "regdate"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
+   
+   BookingDto marketDto= new BookingDto();
+   BookingDao marketDao= new BookingDao();
 
    
    public ReservationMain(AppMain appMain) {
@@ -98,9 +103,9 @@ public class ReservationMain extends Page {
       
       ch_category= new Choice();
       // 검색 카테고리 등록
-      ch_category.add("선택");
-      ch_category.add("작성자");
-      ch_category.add("내용");
+      ch_category.add("Select");
+      ch_category.add("Writer");
+      ch_category.add("Content");
       
       t_keyword= new JTextField();
       bt_search= new JButton("검색");
@@ -194,22 +199,38 @@ public class ReservationMain extends Page {
 //      
      bt_regist.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-         regist();
+    	  try {
+				// 유효성 체크
+				Integer.parseInt(t_price.getText());				
+				if(JOptionPane.showConfirmDialog(ReservationMain.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+					regist();
+					search();
+				}
+			}catch(NumberFormatException e1){
+				JOptionPane.showMessageDialog(ReservationMain.this.getAppMain(), "가격은 숫자만 입력 가능합니다.");
+				t_price.setText("");
+				t_price.requestFocus();
+			}
 
       }
    });
      
+     // 수정
      bt_edit.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-           edit();
-        }
-     });
-     
+ 		public void actionPerformed(ActionEvent e) {
+ 			if(JOptionPane.showConfirmDialog(ReservationMain.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+				
+ 			}
+ 		}
+ 	});
+     // 삭제
      bt_del.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-           delete();
-        }
-     });
+   		public void actionPerformed(ActionEvent e) {
+	  			if(JOptionPane.showConfirmDialog(ReservationMain.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
+					
+	  			}
+   		}
+   	});
      
      bt_search.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -228,6 +249,13 @@ public class ReservationMain extends Page {
            filefind();
         }
      });
+     
+     // 테이블 연결
+     table.addMouseListener(new MouseAdapter() {
+		public void mouseReleased(MouseEvent e) {
+			search();
+		}
+	});
    }
  
      
@@ -244,6 +272,26 @@ public class ReservationMain extends Page {
    
    public void regist() {
       System.out.println("상품을 예약하셨습니다.");
+	   BookingDto.setBook_date(_);
+	   BookingDto.setMemo(t_title.getText());
+	   BookingDto.setPk_booking(Integer.parseInt(t_price.getText()));
+	   BookingDto.setPk_company(t_detail.getText());
+	   BookingDto.setPk_mybike(filename);
+	   BookingDto.setPk_user(filename);
+	   BookingDto.setPk_wanted(filename);
+	   BookingDto.setPrice(filename);
+	   BookingDto.setRegdate(filename);
+	   
+	   try {
+		int result= BookingDto.regist(BookingDto);
+		if(result>0) {
+			JOptionPane.showMessageDialog(this.getAppMain(), "등록 완료");
+		}else {
+			JOptionPane.showMessageDialog(this.getAppMain(), "등록 실패");
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
    }
    
    public void delete() {
@@ -252,9 +300,26 @@ public class ReservationMain extends Page {
    
    public void edit() {
       System.out.println("상품을 수정하셨습니다.");
+	   int pk_usermarket= Integer.parseInt((String)table.getValueAt(table.getSelectedRow(), 0));
+	   marketDto.setTitle(t_title.getText());
+	   marketDto.setPrice(Integer.parseInt(t_price.getText()));
+	   marketDto.setContent(t_detail.getText());
+	   marketDto.setFilename(filename);
+	   marketDto.setPk_usermarket(pk_usermarket);
+	   try {
+			int result= marketDao.updateMarketPost(marketDto);
+			if(result>0) {
+				JOptionPane.showMessageDialog(this.getAppMain(), "수정 완료");
+			}else {
+				JOptionPane.showMessageDialog(this.getAppMain(), "수정 실패");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
    }
    public void search() {
       System.out.println("상품을 검색하셨습니다.");
+      table.updateUI();
    }
    
    // 웹에서 사진 올리기
