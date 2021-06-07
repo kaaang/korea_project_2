@@ -292,8 +292,7 @@ public class MarketPost extends Page{
    }
    // 목록 보기 ----> 문제: 어떻게 받아야할지 모르겠음 공부 필요
    public void selectMarketPostList() {
-	   System.out.println("보이냐");
-	   table.updateUI();
+	  marketDto.setPk_usermarket((int)table.getValueAt(table.getSelectedRow(), 0));
    }
    
    // -------------------------------------------------------------------[이미지 등록]
