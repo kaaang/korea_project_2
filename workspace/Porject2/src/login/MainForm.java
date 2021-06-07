@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import main.AppMain;
 
 public class MainForm extends JFrame{
-
+//브렌치 테스트
 	JPanel p_west;
 	Image img=null;
 	Toolkit kit;
