@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import login.LoginDto;
 import util.Mybatis;
 
 
@@ -29,9 +30,9 @@ public class MarketPostDao {
 		
 		SqlSession sqlSession= factory.openSession();
 		
-		List<MarketPostDto> marketPostList= sqlSession.selectList("marketPostList");
+		List<MarketPostDto> selectMarketPostList= sqlSession.selectList("selectMarketPostList");
 		sqlSession.close();
-		return marketPostList;
+		return selectMarketPostList;
 	}
 	
 	// 상세보기
@@ -39,13 +40,24 @@ public class MarketPostDao {
 		
 		SqlSession sqlSession= factory.openSession();
 		
-		List<MarketPostDto> marketPostDetail= sqlSession.selectList("selectMarketPostOne");
+		List<MarketPostDto> selectMarketPostOne= sqlSession.selectList("selectMarketPostOne");
 		sqlSession.close();
-		return marketPostDetail;
+		return selectMarketPostOne;
 	}
 	
 	// 수정
 	
+	public int updateMarketPost(MarketPostDto marketDto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		int updateMarketPost= sqlSession.insert("updateMarketPost", marketDto);
+		if(updateMarketPost>0) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
+		}
+		return updateMarketPost;
+	}
 	// 삭제
 	
 	// 검색

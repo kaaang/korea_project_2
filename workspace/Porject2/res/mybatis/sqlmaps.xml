@@ -29,14 +29,32 @@
     
     
     
-    
-    
-    <!-- 진아 -->
-    <insert id="MarketDao" parameterType="market.MarketPostDto">
+
+    <!--  진아 -->
+    <insert id="insertMarketPost" parameterType="market.MarketPostDto">
 		insert into usermarket(pk_user, title, price, content, filename) 
     	values(#{pk_user},#{title},#{price},#{content},#{filename})
     </insert>
-    <select id="selectMarketPostAll" resultType="market.MarketPostDto">
-        select * from usermarket
+    
+    <select id="selectMarketPostList" resultType="market.MarketPostDto">
+        select * from usermarket order by pk_usermarket desc
+        
     </select>
+    
+     <select id="selectMarketPostOne" resultType="util.MemberDto">
+        select pk_usermarket, pk_user, title, content, price, regdate  from usermarket WHERE pk_usermarket= #{pk_usermarket}
+    </select>
+    
+  	<update id="updateMarketPost">
+		update usermarket set title = #{title}, price= #{price},content = #{content}, filename- #{filename} WHERE pk_usermarket= #{pk_usermarket}
+	</update> 
+
+   <delete id="deleteMarketPost">
+		delete from usermarket  WHERE pk_usermarket= #{pk_usermarket}
+	</delete>
+	
+    <select id= "selectMarketSearch" resultType= "market.MarketPostDto">
+    	select * from usermarket where title like '%#{t_search}%' or content like '%#{t_search}%'
+	</select>
+    
 </mapper>

@@ -100,10 +100,10 @@ public class MarketPost extends Page{
       p_search= new JPanel();
       
       ch_category= new Choice();
-      // 검색 카테고리 등록
-      ch_category.add("선택");
-      ch_category.add("작성자");
-      ch_category.add("내용");
+      // 검색 카테고리 등록 (한글 깨짐)
+      ch_category.add("Select");
+      ch_category.add("Writer");
+      ch_category.add("Content");
       
       t_keyword= new JTextField();
       bt_search= new JButton("검색");
@@ -265,18 +265,34 @@ public class MarketPost extends Page{
 		e.printStackTrace();
 	}
    }
+   //---------------------------------------------- 화면이 보여야 수정 삭제를 확인 할 수 있음
    // 수정
-   public void regist() {
-	   
+   public void updateMarketPost() {
+	   int pk_usermarket= Integer.parseInt((String)table.getValueAt(table.getSelectedRow(), 0));
+	   marketDto.setTitle(t_title.getText());
+	   marketDto.setPrice(Integer.parseInt(t_price.getText()));
+	   marketDto.setContent(t_detail.getText());
+	   marketDto.setFilename(filename);
+	   marketDto.setPk_usermarket(pk_usermarket);
+	   try {
+			int result= marketDao.updateMarketPost(marketDto);
+			if(result>0) {
+				JOptionPane.showMessageDialog(this.getAppMain(), "수정 완료");
+			}else {
+				JOptionPane.showMessageDialog(this.getAppMain(), "수정 실패");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
    }
    // 삭제
    public void edit() {
 
 	
    }
-   // 목록 보기
+   // 목록 보기 ----> 문제: 어떻게 받아야할지 모르겠음 공부 필요
    public void selectMarketPostList() {
-	   
+	   System.out.println("보이냐");
 	   table.updateUI();
    }
    

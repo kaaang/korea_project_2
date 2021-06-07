@@ -1,19 +1,22 @@
 package market;
 
 public class MarketPostDto {
+	private int pk_usermarket;
 	private String pk_user;
 	private String title;
 	private int price;
 	private String content;
 	private String filename;
+	private String regdate;
 	
-//	public MarketPostDto(String pk_user, String title, int price, String content, String filename) {
-//		this.pk_user= pk_user;
-//		this.title= title;
-//		this.price= price;
-//		this.content= content;
-//		this.filename= filename;
-//	}
+	
+	
+	public int getPk_usermarket() {
+		return pk_usermarket;
+	}
+	public void setPk_usermarket(int pk_usermarket) {
+		this.pk_usermarket = pk_usermarket;
+	}
 	
 	public String getPk_user() {
 		return pk_user;
@@ -49,5 +52,13 @@ public class MarketPostDto {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
+	
+  public String getRegdate() {
+        return regdate;
+    }
+
+    public void setRegdate(String regdate) {
+        this.regdate = regdate;
+    }
 	
 }
