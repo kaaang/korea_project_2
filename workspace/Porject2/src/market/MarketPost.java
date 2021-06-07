@@ -33,6 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 
+import login.LoginDto;
 import main.AppMain;
 import main.Page;
 
@@ -41,7 +42,6 @@ public class MarketPost extends Page{
    JPanel p_west;
    JButton bt_regist;
    JTextField t_title;
-   JTextField t_user;
    JTextField t_price;
    JTextArea t_detail;
    JScrollPane scroll;
@@ -68,19 +68,19 @@ public class MarketPost extends Page{
    JFileChooser chooser= new JFileChooser("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res");
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
-   String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate"}; // 컬럼배열
+   String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate", "filename"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
-    
+    LoginDto user;
 
    
    public MarketPost(AppMain appMain) {
       super(appMain);
+      this.user= appMain.getUser();
       // -----------------------------------------------[생성]
       // 서쪽 관련
       p_west= new JPanel();
       bt_regist= new JButton("상품등록");
       t_title= new JTextField();
-      t_user= new JTextField();
       t_price= new JTextField();
       t_detail= new JTextArea();
       scroll= new  JScrollPane(t_detail);
@@ -103,6 +103,7 @@ public class MarketPost extends Page{
       ch_category= new Choice();
       // 검색 카테고리 등록 (한글 깨짐)
       ch_category.add("Select");
+      ch_category.add("Title");
       ch_category.add("Writer");
       ch_category.add("Content");
       
@@ -151,7 +152,6 @@ public class MarketPost extends Page{
       can.setBackground(Color.DARK_GRAY);
       
       t_title.setPreferredSize(d);
-      t_user.setPreferredSize(d);
       t_price.setPreferredSize(d);
 
       
@@ -164,7 +164,6 @@ public class MarketPost extends Page{
       // 서쪽
       p_west.add(bt_regist);
       p_west.add(t_title);
-      p_west.add(t_user);
       p_west.add(t_price);
       p_west.add(scroll);
       p_west.add(bt_web);
@@ -226,6 +225,7 @@ public class MarketPost extends Page{
   		public void actionPerformed(ActionEvent e) {
   			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "수정 하시겠습니까?")== JOptionPane.OK_OPTION){
   				updateMarketPost();
+  				selectMarketPostList();
   			}
   		}
   	});
@@ -233,14 +233,23 @@ public class MarketPost extends Page{
       bt_del.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
 	  			if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "삭제 하시겠습니까?")== JOptionPane.OK_OPTION){
-					
+	  				deleteMarketPost();
 	  			}
     		}
     	});
       // 검색
       bt_search.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			
+			// 검색 안 하면 모든 데이터가 나오게
+			if(ch_category.getSelectedIndex()==0 && t_keyword.getText().length()==0) {
+				selectMarketPostList();
+			}else {
+				// 검색 하면 해당 검색 결과만 나오게
+				int index= ch_category.getSelectedIndex();
+				if (index !=0) {
+					selectMarketSearch(index);
+				}
+			}
 		}
 	});
       
@@ -248,6 +257,9 @@ public class MarketPost extends Page{
       table.addMouseListener(new MouseAdapter() {
 		public void mouseReleased(MouseEvent e) {
 			updateTable();
+		}
+		public void mouseClicked(MouseEvent e) {
+			updateDetail();
 		}
 	});
 
@@ -262,7 +274,6 @@ public class MarketPost extends Page{
 	   HttpURLConnection httpCon= null;
 	   InputStream is= null;
 	   FileOutputStream fos= null;
-	   
 	   try {
 		url= new URL(path);
 		httpCon= (HttpURLConnection)url.openConnection();
@@ -280,6 +291,7 @@ public class MarketPost extends Page{
 			fos.write(data);
 		}
 		JOptionPane.showMessageDialog(this.getAppMain(), "복사 완료");
+		can.repaint();
 	} catch (MalformedURLException e) {
 		e.printStackTrace();
 	} catch (IOException e) {
@@ -352,8 +364,11 @@ public class MarketPost extends Page{
    // -------------------------------------------------------------------[메소드]
    // 상품 등록(사진 유/무 둘다 업로드 가능)
    public void insertMarketPost() {
+	   // id 받기
+	   
+	   
 	   MarketPostDto marketDto= new MarketPostDto();
-	   marketDto.setPk_user(t_user.getText());
+//	   marketDto.setPk_user(user.getPK_user);
 	   marketDto.setTitle(t_title.getText());
 	   marketDto.setPrice(t_price.getText());
 	   marketDto.setContent(t_detail.getText());
@@ -373,14 +388,13 @@ public class MarketPost extends Page{
    // 수정
    public void updateMarketPost() {
 	   MarketPostDto marketDto= new MarketPostDto();
-	   String pk_usermarket=(String)table.getValueAt(table.getSelectedRow(), 0);
+	   marketDto.setPk_usermarket((String)table.getValueAt(table.getSelectedRow(), 0));
 	   marketDto.setTitle(t_title.getText());
-	   marketDto.setPk_usermarket(pk_usermarket);
 	   marketDto.setPrice(t_price.getText());
 	   marketDto.setContent(t_detail.getText());
 	   marketDto.setFilename(filename);
 	   MarketPostDao marketDao= new MarketPostDao();
-	   image= kit.getImage("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename.toString());
+	   image= kit.getImage("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
 	   can.repaint();
 	   try {
 			int result= marketDao.updateMarketPost(marketDto);
@@ -395,8 +409,27 @@ public class MarketPost extends Page{
    }
    
    // 삭제
-   public void edit() {
-
+   public void deleteMarketPost() {
+	   MarketPostDto marketDto= new MarketPostDto();
+	   marketDto.setPk_usermarket((String)table.getValueAt(table.getSelectedRow(), 0));
+	   marketDto.setTitle(t_title.getText());
+	   marketDto.setPrice(t_price.getText());
+	   marketDto.setContent(t_detail.getText());
+	   marketDto.setFilename(filename);
+	   MarketPostDao marketDao= new MarketPostDao();
+	   try {
+		int result = marketDao.deleteMarketPost(marketDto);
+		if(result>0) {
+			JOptionPane.showMessageDialog(this.getAppMain(), "삭제 완료");
+			File file= new File("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
+			file.delete();
+			selectMarketPostList();
+		}else {
+			JOptionPane.showMessageDialog(this.getAppMain(), "삭제 실패");
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 	
    }
    // 목록 보기
@@ -421,6 +454,7 @@ public class MarketPost extends Page{
            data[index][3] = selectMarketPostList.get(index).getPrice();
            data[index][4] = selectMarketPostList.get(index).getContent();
            data[index][5] = selectMarketPostList.get(index).getRegdate();
+           data[index][6] = selectMarketPostList.get(index).getFilename();
            index++;
        }
 
@@ -432,13 +466,42 @@ public class MarketPost extends Page{
    private void updateTable(){
 	   MarketPostDto marketDto= new MarketPostDto();
 	   t_title.setText((String) table.getValueAt(table.getSelectedRow(), 2));
-	   t_user.setText((String) table.getValueAt(table.getSelectedRow(), 1));
 	   t_price.setText((String) table.getValueAt(table.getSelectedRow(), 3));
 	   t_detail.setText((String) table.getValueAt(table.getSelectedRow(), 4));
+	   
 	   image= kit.getImage("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
 	   can.repaint();  
   }
-
    
+   // 검색
+   public void selectMarketSearch(int index) {
+	   MarketPostDao marketDao= new MarketPostDao();
+	   MarketPostDto marketDto= new MarketPostDto();
+	   String category;
+	   
+	   if(index==1) {
+		   category="title";
+	   }else if(index==2) {
+		   category="pk_user";
+	   }else{
+		   category="content";
+	   }
+	   
+	   marketDto.setCategory(category);
+	   marketDto.setKeyword(t_keyword.getText());
+	   try {
+		List<MarketPostDto> selectMarketSearch= marketDao.selectMarketSearch(marketDto);
+		showtable(selectMarketSearch);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+   }
+   // 사진 띄우기
+   public void updateDetail() { 
+	   filename = (String)table.getValueAt(table.getSelectedRow(), 6);
+	   image= kit.getImage("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res\\"+filename);
+	   can.repaint();  
+	   
+   }
    
 }
