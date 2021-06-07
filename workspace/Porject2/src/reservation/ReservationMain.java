@@ -2,9 +2,12 @@ package reservation;
 
 import java.awt.BorderLayout;
 import java.awt.Choice;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -47,7 +50,7 @@ public class ReservationMain extends Page {
    JScrollPane scroll_table;
    String filename; // 유저의 복사에 의해 생성된 파일명
    // 테이블
-   String[] columns= {"pk_user", "pk_mybike", "price", "pk_booking", "pk_wanted", "memo "}; // 컬럼배열
+   String[] columns= {"pk_user", "pk_mybike", "price", "pk_booking", "pk_wanted"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
    
    BookingDto bookingDto= new BookingDto();
@@ -67,6 +70,105 @@ public class ReservationMain extends Page {
       t_memo= new JTextArea();
       scroll= new  JScrollPane(t_memo);
 
+      
+      // PlaceHolder
+      t_user.setForeground(Color.GRAY);
+      t_user.addFocusListener(new FocusListener() {
+          @Override
+          public void focusGained(FocusEvent e) {
+              if (t_user.getText().equals("User")) {
+            	  t_user.setText("");
+            	  t_user.setForeground(Color.BLACK);
+              }
+          }
+          @Override
+          public void focusLost(FocusEvent e) {
+              if (t_user.getText().isEmpty()) {
+            	  t_user.setForeground(Color.GRAY);
+            	  t_user.setText("User");
+              }
+          }
+          });
+      
+      
+      
+      t_bike.setForeground(Color.GRAY);
+      t_bike.addFocusListener(new FocusListener() {
+    	  @Override
+    	  public void focusGained(FocusEvent e) {
+    		  if (t_bike.getText().equals("bike")) {
+    			  t_bike.setText("");
+    			  t_bike.setForeground(Color.BLACK);
+    		  }
+    	  }
+    	  @Override
+    	  public void focusLost(FocusEvent e) {
+    		  if (t_bike.getText().isEmpty()) {
+    			  t_bike.setForeground(Color.GRAY);
+    			  t_bike.setText("bike");
+    		  }
+    	  }
+      });
+      
+      
+      
+      t_price.setForeground(Color.GRAY);
+      t_price.addFocusListener(new FocusListener() {
+    	  @Override
+    	  public void focusGained(FocusEvent e) {
+    		  if (t_price.getText().equals("price")) {
+    			  t_price.setText("");
+    			  t_price.setForeground(Color.BLACK);
+    		  }
+    	  }
+    	  @Override
+    	  public void focusLost(FocusEvent e) {
+    		  if (t_price.getText().isEmpty()) {
+    			  t_price.setForeground(Color.GRAY);
+    			  t_price.setText("price");
+    		  }
+    	  }
+      });
+      
+      
+      t_wanted.setForeground(Color.GRAY);
+      t_wanted.addFocusListener(new FocusListener() {
+    	  @Override
+    	  public void focusGained(FocusEvent e) {
+    		  if (t_wanted.getText().equals("booking")) {
+    			  t_wanted.setText("");
+    			  t_wanted.setForeground(Color.BLACK);
+    		  }
+    	  }
+    	  @Override
+    	  public void focusLost(FocusEvent e) {
+    		  if (t_wanted.getText().isEmpty()) {
+    			  t_wanted.setForeground(Color.GRAY);
+    			  t_wanted.setText("booking");
+    		  }
+    	  }
+      });
+      
+      
+      t_memo.setForeground(Color.GRAY);
+      t_memo.addFocusListener(new FocusListener() {
+    	  @Override
+    	  public void focusGained(FocusEvent e) {
+    		  if (t_memo.getText().equals("wanted")) {
+    			  t_memo.setText("");
+    			  t_memo.setForeground(Color.BLACK);
+    		  }
+    	  }
+    	  @Override
+    	  public void focusLost(FocusEvent e) {
+    		  if (t_memo.getText().isEmpty()) {
+    			  t_memo.setForeground(Color.GRAY);
+    			  t_memo.setText("wanted");
+    		  }
+    	  }
+      });
+      
+      
       
 
       bt_edit= new JButton("수정");
@@ -187,7 +289,7 @@ public class ReservationMain extends Page {
      bt_edit.addActionListener(new ActionListener() {
  		public void actionPerformed(ActionEvent e) {
  			if(JOptionPane.showConfirmDialog(ReservationMain.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
-				
+ 				updateBooking();
  			}
  		}
  	});

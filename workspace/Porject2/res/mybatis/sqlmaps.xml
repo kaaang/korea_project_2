@@ -61,7 +61,7 @@
    <!-- 태영 --> 
     <insert id="insertBooking" parameterType="reservation.BookingDto">
       insert into booking(pk_user,pk_mybike,price,pk_wanted,memo) 
-       values(#{pk_user},#{pk_mybike},#{price},#{pk_wanted},#{memo})
+       values(${pk_user},${pk_mybike},#{price},${pk_wanted},#{memo})
     </insert>
     
     <select id="selectBookingList" resultType="reservation.BookingDto">
