@@ -57,20 +57,31 @@
 
 
    <!-- 태영 --> 
-    <insert id="BookingDao" parameterType="reservation.BookingDto">
-      insert into booking(pk_booking, pk_wanted, pk_user, pk_mybike, pk_company,book_date, price, memo, regdate) 
-       values(#{pk_booking},#{pk_wanted},#{pk_user},#{pk_mybike},#{pk_company},#{book_date},#{price},#{memo},#{regdate})
+    <insert id="insertBooking" parameterType="reservation.BookingDto">
+      insert into booking(pk_user,pk_mybike,price,pk_wanted,memo) 
+       values(${pk_user},${pk_mybike},#{price},${pk_wanted},#{memo})
     </insert>
-    <select id="selectbookingAll" resultType="reservation.BookingDto">
-        select * from booking
+    
+    <select id="selectBookingList" resultType="reservation.BookingDto">
+        select * from booking order by pk_booking desc
+        
     </select>
-    <insert id="CompanyDao" parameterType="company.CompanyDto">
-      insert into company(addr, comp_id, comp_pass, introduce, pk_company,tel) 
-       values(#{addr},#{comp_id},#{comp_pass},#{introduce},#{pk_company},#{tel})
-    </insert>
-    <select id="selectCompanyAll" resultType="company.CompanyDto">
-        select * from company
+    
+     <select id="selectBookingOne" resultType="util.MemberDto">
+        select pk_user, pk_mybike, price, pk_wanted, memo  from booking WHERE pk_booking= #{pk_booking}
     </select>
+    
+     <update id="updateBooking">
+      update booking set pk_user = #{pk_user}, pk_mybike= #{pk_mybike},price = #{price}, pk_wanted- #{pk_wanted}, memo- #{memo} WHERE pk_booking= #{pk_booking}
+   </update> 
+
+   <delete id="deleteBooking">
+      delete from booking  WHERE pk_booking= #{pk_booking}
+   </delete>
+   
+    <select id= "selectBookingSearch" resultType= "reservation.BookingDto">
+       select * from booking where pk_user like '%#{t_search}%' or memo like '%#{t_search}%'
+   </select>
     
     
     
