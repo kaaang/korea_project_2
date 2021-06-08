@@ -30,10 +30,11 @@ public class ReservationMain extends Page {
    JButton bt_regist;
    JTextField t_user; // 유저 이름 
    JTextField t_bike; //  유저 바이크
-   JTextField t_price; // 가격
-   JTextField t_wanted; // 원하는 개수
+   JTextField t_price; // 가격 // 원하는 개수
    JTextArea t_memo; // 필요한 물건 및 예약내용
+   JTextArea t_wanted; // 필요한 물건 및 예약내용
    JScrollPane scroll;
+   JScrollPane w_scroll;
 
 
    JButton bt_edit;
@@ -66,113 +67,114 @@ public class ReservationMain extends Page {
       t_user= new JTextField();
       t_bike= new JTextField();
       t_price= new JTextField();
-      t_wanted= new JTextField();
+      t_wanted= new JTextArea();
       t_memo= new JTextArea();
       scroll= new  JScrollPane(t_memo);
+      w_scroll = new  JScrollPane(t_wanted);
 
       
-      // PlaceHolder
-      t_user.setForeground(Color.GRAY);
-      t_user.addFocusListener(new FocusListener() {
-          @Override
-          public void focusGained(FocusEvent e) {
-              if (t_user.getText().equals("User")) {
-            	  t_user.setText("");
-            	  t_user.setForeground(Color.BLACK);
-              }
-          }
-          @Override
-          public void focusLost(FocusEvent e) {
-              if (t_user.getText().isEmpty()) {
-            	  t_user.setForeground(Color.GRAY);
-            	  t_user.setText("User");
-              }
-          }
-          });
-      
-      
-      
-      t_bike.setForeground(Color.GRAY);
-      t_bike.addFocusListener(new FocusListener() {
-    	  @Override
-    	  public void focusGained(FocusEvent e) {
-    		  if (t_bike.getText().equals("bike")) {
-    			  t_bike.setText("");
-    			  t_bike.setForeground(Color.BLACK);
-    		  }
-    	  }
-    	  @Override
-    	  public void focusLost(FocusEvent e) {
-    		  if (t_bike.getText().isEmpty()) {
-    			  t_bike.setForeground(Color.GRAY);
-    			  t_bike.setText("bike");
-    		  }
-    	  }
-      });
-      
-      
-      
-      t_price.setForeground(Color.GRAY);
-      t_price.addFocusListener(new FocusListener() {
-    	  @Override
-    	  public void focusGained(FocusEvent e) {
-    		  if (t_price.getText().equals("price")) {
-    			  t_price.setText("");
-    			  t_price.setForeground(Color.BLACK);
-    		  }
-    	  }
-    	  @Override
-    	  public void focusLost(FocusEvent e) {
-    		  if (t_price.getText().isEmpty()) {
-    			  t_price.setForeground(Color.GRAY);
-    			  t_price.setText("price");
-    		  }
-    	  }
-      });
-      
-      
-      t_wanted.setForeground(Color.GRAY);
-      t_wanted.addFocusListener(new FocusListener() {
-    	  @Override
-    	  public void focusGained(FocusEvent e) {
-    		  if (t_wanted.getText().equals("booking")) {
-    			  t_wanted.setText("");
-    			  t_wanted.setForeground(Color.BLACK);
-    		  }
-    	  }
-    	  @Override
-    	  public void focusLost(FocusEvent e) {
-    		  if (t_wanted.getText().isEmpty()) {
-    			  t_wanted.setForeground(Color.GRAY);
-    			  t_wanted.setText("booking");
-    		  }
-    	  }
-      });
-      
-      
-      t_memo.setForeground(Color.GRAY);
-      t_memo.addFocusListener(new FocusListener() {
-    	  @Override
-    	  public void focusGained(FocusEvent e) {
-    		  if (t_memo.getText().equals("wanted")) {
-    			  t_memo.setText("");
-    			  t_memo.setForeground(Color.BLACK);
-    		  }
-    	  }
-    	  @Override
-    	  public void focusLost(FocusEvent e) {
-    		  if (t_memo.getText().isEmpty()) {
-    			  t_memo.setForeground(Color.GRAY);
-    			  t_memo.setText("wanted");
-    		  }
-    	  }
-      });
-      
-      
+//      // PlaceHolder
+//      t_user.setForeground(Color.GRAY);
+//      t_user.addFocusListener(new FocusListener() {
+//          @Override
+//          public void focusGained(FocusEvent e) {
+//              if (t_user.getText().equals("Enter User")) {
+//            	  t_user.setText("Enter User");
+//            	  t_user.setForeground(Color.BLACK);
+//              }
+//          }
+//          @Override
+//          public void focusLost(FocusEvent e) {
+//              if (t_user.getText().isEmpty()) {
+//            	  t_user.setForeground(Color.GRAY);
+//            	  t_user.setText("");
+//              }
+//          }
+//          });
+//      
+//      
+//      
+//      t_bike.setForeground(Color.GRAY);
+//      t_bike.addFocusListener(new FocusListener() {
+//    	  @Override
+//    	  public void focusGained(FocusEvent e) {
+//    		  if (t_bike.getText().equals("Enter bike")) {
+//    			  t_bike.setText("");
+//    			  t_bike.setForeground(Color.BLACK);
+//    		  }
+//    	  }
+//    	  @Override
+//    	  public void focusLost(FocusEvent e) {
+//    		  if (t_bike.getText().isEmpty()) {
+//    			  t_bike.setForeground(Color.GRAY);
+//    			  t_bike.setText("Enter bike");
+//    		  }
+//    	  }
+//      });
+//      
+//      
+//      
+//      t_price.setForeground(Color.GRAY);
+//      t_price.addFocusListener(new FocusListener() {
+//    	  @Override
+//    	  public void focusGained(FocusEvent e) {
+//    		  if (t_price.getText().equals("Enter price")) {
+//    			  t_price.setText("");
+//    			  t_price.setForeground(Color.BLACK);
+//    		  }
+//    	  }
+//    	  @Override
+//    	  public void focusLost(FocusEvent e) {
+//    		  if (t_price.getText().isEmpty()) {
+//    			  t_price.setForeground(Color.GRAY);
+//    			  t_price.setText("Enter price");
+//    		  }
+//    	  }
+//      });
+//      
+//      
+//      t_wanted.setForeground(Color.GRAY);
+//      t_wanted.addFocusListener(new FocusListener() {
+//    	  @Override
+//    	  public void focusGained(FocusEvent e) {
+//    		  if (t_wanted.getText().equals("Enter booking")) {
+//    			  t_wanted.setText("");
+//    			  t_wanted.setForeground(Color.BLACK);
+//    		  }
+//    	  }
+//    	  @Override
+//    	  public void focusLost(FocusEvent e) {
+//    		  if (t_wanted.getText().isEmpty()) {
+//    			  t_wanted.setForeground(Color.GRAY);
+//    			  t_wanted.setText("Enter booking");
+//    		  }
+//    	  }
+//      });
+//      
+//      
+//      t_memo.setForeground(Color.GRAY);
+//      t_memo.addFocusListener(new FocusListener() {
+//    	  @Override
+//    	  public void focusGained(FocusEvent e) {
+//    		  if (t_memo.getText().equals("Enter wanted")) {
+//    			  t_memo.setText("");
+//    			  t_memo.setForeground(Color.BLACK);
+//    		  }
+//    	  }
+//    	  @Override
+//    	  public void focusLost(FocusEvent e) {
+//    		  if (t_memo.getText().isEmpty()) {
+//    			  t_memo.setForeground(Color.GRAY);
+//    			  t_memo.setText("Enter wanted");
+//    		  }
+//    	  }
+//      });
+//      
+//      
       
 
-      bt_edit= new JButton("수정");
-      bt_del= new JButton("삭제");
+      bt_edit= new JButton("상품 수정");
+      bt_del= new JButton("상품 삭제");
       
       
       // 센터
@@ -182,8 +184,11 @@ public class ReservationMain extends Page {
       ch_category= new Choice();
       // 검색 카테고리 등록
       ch_category.add("Select");
-      ch_category.add("Writer");
-      ch_category.add("Content");
+      ch_category.add("user");
+      ch_category.add("mybike");
+      ch_category.add("price");
+      ch_category.add("booking");
+      ch_category.add("wanted");
       
       t_keyword= new JTextField();
       bt_search= new JButton("검색");
@@ -226,11 +231,11 @@ public class ReservationMain extends Page {
       // 서쪽
       p_west.setPreferredSize(new Dimension(200, 700));
       scroll.setPreferredSize(new Dimension(180, 180));  
+      w_scroll.setPreferredSize(new Dimension(180, 180));  
 
-      t_bike.setPreferredSize(d);
-      t_wanted.setPreferredSize(d);
-      t_price.setPreferredSize(d);
-      t_user.setPreferredSize(d);
+      t_bike.setPreferredSize(new Dimension(180,50));
+      t_price.setPreferredSize(new Dimension(180,50));
+      t_user.setPreferredSize(new Dimension(180,50));
       // 센터
       p_center.setLayout(new BorderLayout());
       ch_category.setPreferredSize(d);
@@ -239,16 +244,16 @@ public class ReservationMain extends Page {
       // -----------------------------------------------[조립]
       
       // 서쪽
-      p_west.add(bt_regist);
-      p_west.add(t_bike);
-      p_west.add(t_wanted);
-      p_west.add(t_user);
-      p_west.add(t_price);
-      p_west.add(scroll);
-
-      p_west.add(bt_edit);
-      p_west.add(bt_del);
-      add(p_west, BorderLayout.WEST);
+//      p_west.add(bt_regist);
+//      p_west.add(t_user);
+//      p_west.add(t_bike);
+//      p_west.add(t_price);
+//      p_west.add(w_scroll);
+//      p_west.add(scroll);
+//
+//      p_west.add(bt_edit);
+//      p_west.add(bt_del);
+//      add(p_west, BorderLayout.WEST);
       
       // 센터
       p_search.add(ch_category);
@@ -381,7 +386,15 @@ public class ReservationMain extends Page {
    
    public void search() {
       System.out.println("상품을 검색하셨습니다.");
-
+      BookingDao bookingDao = new BookingDao();
+      List<BookingDto> selectBooking;
+	try {
+		selectBooking = bookingDao.selectBooking();
+		showtable(selectBooking);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+		table.updateUI();
    }
    
    public void selectBookingList() {
