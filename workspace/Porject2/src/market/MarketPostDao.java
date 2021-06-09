@@ -47,7 +47,7 @@ public class MarketPostDao {
 	public int updateMarketPost(MarketPostDto marketDto) throws Exception{
 		
 		SqlSession sqlSession= factory.openSession();
-		int updateMarketPost= sqlSession.insert("updateMarketPost", marketDto);
+		int updateMarketPost= sqlSession.update("updateMarketPost", marketDto);
 		if(updateMarketPost>0) {
 			sqlSession.commit();
 		}else {
@@ -60,7 +60,7 @@ public class MarketPostDao {
 	public int deleteMarketPost(MarketPostDto marketDto) throws Exception{
 		
 		SqlSession sqlSession= factory.openSession();
-		int deleteMarketPost= sqlSession.insert("deleteMarketPost", marketDto);
+		int deleteMarketPost= sqlSession.delete("deleteMarketPost", marketDto);
 		if(deleteMarketPost>0) {
 			sqlSession.commit();
 		}else {

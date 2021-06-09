@@ -27,6 +27,7 @@
     
 
   <!--  진아 -->
+  	<!--  중고장터 -->
     <insert id="insertMarketPost" parameterType="market.MarketPostDto">
       insert into usermarket(pk_user, title, price, content, filename) 
        values(#{pk_user},#{title},#{price},#{content},#{filename})
@@ -36,24 +37,43 @@
 		select * from usermarket a, user b where a.pk_user=b.pk_user order by a.pk_usermarket desc        
     </select>
     
-     <select id="selectMarketPostOne" resultType="util.MemberDto">
+     <select id="selectMarketPostOne" resultType="market.MarketReviewDto">
         select pk_usermarket, pk_user , title, content, price, regdate  from usermarket WHERE pk_usermarket= #{pk_usermarket}
     </select>
     
      <update id="updateMarketPost" parameterType="market.MarketPostDto">
       update usermarket set title = #{title}, price= #{price},content = #{content}, filename= #{filename} WHERE pk_usermarket= #{pk_usermarket}
 	</update>
+	
    <delete id="deleteMarketPost" parameterType="market.MarketPostDto">
       delete from usermarket  WHERE pk_usermarket= #{pk_usermarket}
    </delete>
    
     <select id= "selectMarketSearch" resultType= "market.MarketPostDto">
-       select * from usermarket where ${category} like '%${keyword}%'
+       select * from usermarket where ${category} like ${keyword}
    </select>
 
+   <!--  리뷰 -->
+	<select id="selectReviewList" resultType="market.MarketReviewDto">
+		<!-- select * from user_review order by pk_user_review desc -->
+		select * from user_review a, usermarket b where a.pk_usermarket=b.pk_usermarket order by a.pk_user_review desc                            
+    </select>
+    
+     <select id="selectReviewOne" resultType="market.MarketReviewDto">
+        select pk_user_review, pk_usermarket , seller, buyer, content, rev_date, score, hide  from user_review WHERE pk_usermarket= #{pk_usermarket}
+    </select>
 
-
-
+   <delete id="deleteReview" parameterType="market.MarketReviewDto">
+      delete from user_review  WHERE pk_user_review= #{pk_user_review}
+   </delete>
+   
+    <select id= "selectReviewSearch" resultType= "market.MarketReviewDto">
+       select * from user_review where ${reviewCategory} like '%${reviewKeyword}%'
+   </select>
+   
+   	<update id="updateDisplayState" parameterType="market.MarketReviewDto">
+		update user_review set hide= #{hide} WHERE pk_user_review= #{pk_user_review}
+    </update>
 
 
    <!-- 태영 --> 
@@ -72,13 +92,7 @@
         select * from company
     </select>
     
-    
-    
-    
-    
-    
-    
-    
+
     <!-- 석호씨 -->
    <select id="selectAllUser" resultType="user.UserDto">
     select * from user limit 50
