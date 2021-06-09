@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import bike.Bike;
 import company.CompanyMain;
 import customer.CustomerCenter;
+import customer.CustomerCenterAns;
 import market.MarketLog;
 import market.MarketPost;
 import market.MarketReview;
@@ -41,7 +42,8 @@ public class AppMain extends JFrame implements ActionListener{
 			"전체조회"};
 	CustomButton[] sub_btn = new CustomButton[sub_string.length];
 	
-	Page[] pages = new Page[12];
+	public Page[] pages = new Page[12];
+	public CustomerCenterAns subCustomer;
 	
 	public AppMain() {
 		p_west = new JPanel();
@@ -66,6 +68,7 @@ public class AppMain extends JFrame implements ActionListener{
 		pages[9] = new ReservationUnanswered(this);
 		pages[10] = new CompanyMain(this);
 		pages[11] = new CustomerCenter(this);
+		subCustomer=new CustomerCenterAns(this);
 		
 		
 		for(int i=0;i<sub_string.length ;i++) {
@@ -120,6 +123,7 @@ public class AppMain extends JFrame implements ActionListener{
 		for(Page p : pages) {
 			p_center.add(p);
 		}
+		p_center.add(subCustomer);
 		add(p_center);
 		
 		
