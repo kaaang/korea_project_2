@@ -8,18 +8,26 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class CustomerCenter extends Page{
-	JPanel p_west;
-	JPanel p_east;
-	JPanel p_south;
+	JPanel p_west,p_east;
+	JPanel p_south,p_south_left,p_south_center,p_south_right;
 
 	JPanel p_center;
+	JPanel p_center_sub1,p_center_sub2;
 	JPanel p_search;
 	Choice ch_category;
 	JTextField t_keyword;
 	JButton bt_search;
+
+	JTextField t_target;
+	JButton bt_viewAns;
+	JButton bt_rollbackTable;
+	JTextArea t_ans;
+	JButton bt_sendAns;
 
 	JTable table;
 	JTable comTable;
@@ -28,7 +36,7 @@ public class CustomerCenter extends Page{
 
 	Thread thread;
 
-	String[] columns = {"no", "제목", "내용", "등록일", "답변여부"};
+	String[] columns = {"no", "제목", "내용", "유저명", "등록일", "답변여부"};
 	String[][] records = {};
 
 	String[] ComColumns = {"no", "제목", "내용", "등록일"};
@@ -37,11 +45,22 @@ public class CustomerCenter extends Page{
 	public CustomerCenter(AppMain appMain) {
 		super(appMain);
 
-		p_south=new JPanel();
 		p_west = new JPanel();
 		p_east = new JPanel();
 		p_center = new JPanel();
+
 		p_search = new JPanel();
+		//답변입력영역
+		p_south=new JPanel();
+		p_south_left=new JPanel();
+		p_south_center=new JPanel();
+		p_south_right=new JPanel();
+		t_target=new JTextField();
+		bt_rollbackTable=new JButton("질문목록");
+		bt_viewAns=new JButton("답변목록");
+		t_ans=new JTextArea();
+		bt_sendAns=new JButton("답변등록");
+
 
 		ch_category = new Choice();
 		for(String string_category : columns){
@@ -114,7 +133,6 @@ public class CustomerCenter extends Page{
 		scroll_table = new JScrollPane(table);
 		comScroll_table = new JScrollPane(comTable);
 
-		comScroll_table.setVisible(false);
 
 
 		Dimension d = new Dimension(180, 30);
@@ -123,16 +141,38 @@ public class CustomerCenter extends Page{
 		p_center.setLayout(new BorderLayout());
 		ch_category.setPreferredSize(d);
 		t_keyword.setPreferredSize(new Dimension(450, 30));
+		t_target.setPreferredSize(new Dimension( 180,30));
 
 		//모양 잡아주기
 		p_west.setPreferredSize(new Dimension(7,800));
 		add(p_west, BorderLayout.WEST);
 		p_east.setPreferredSize(new Dimension(7,800));
 		add(p_east, BorderLayout.EAST);
-		p_south.setPreferredSize(new Dimension(1160,42));
+		t_ans.setPreferredSize(new Dimension(800,60));
+		bt_sendAns.setPreferredSize(new Dimension(100,60));
+
+		t_target.setDisabledTextColor(Color.BLACK);
+		t_target.setHorizontalAlignment(JTextField.CENTER);
+		t_target.setEnabled(false);
+		t_target.setText("섹-시한 강신혁");
+
+		p_south_left.add(t_target);
+		p_south_left.add(bt_rollbackTable);
+		p_south_left.add(bt_viewAns);
+		p_south_left.setPreferredSize(new Dimension(200,130));
+		p_south.add(p_south_left,BorderLayout.WEST);
+		p_south_center.add(t_ans);
+		p_south_center.setPreferredSize(new Dimension(800,130));
+		p_south.add(p_south_center,BorderLayout.CENTER);
+		p_south_right.add(bt_sendAns);
+		p_south_right.setPreferredSize(new Dimension(110,130));
+		p_south.add(p_south_right,BorderLayout.EAST);
+		p_south.setPreferredSize(new Dimension(1160,130));
 		add(p_south, BorderLayout.SOUTH);
 
 		// 검색영역
+		p_center_sub1=new JPanel();
+		p_center_sub2=new JPanel();
 		p_search.add(ch_category);
 		p_search.add(t_keyword);
 		p_search.add(bt_search);
@@ -144,6 +184,7 @@ public class CustomerCenter extends Page{
 			@Override
 			public void run() {
 				getList();
+//				getList2();
 			}
 		};
 		thread.start();
@@ -156,13 +197,56 @@ public class CustomerCenter extends Page{
 				search();
 			}
 		});
+		bt_viewAns.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getList2();
+				p_center.setVisible(false);
+//				p_center2.setVisible(true);
+			}
+		});
+		bt_rollbackTable.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				p_center.setVisible(true);
+//				p_center2.setVisible(false);
+			}
+		});
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				t_target.setText((String) table.getValueAt(table.getSelectedRow(), 0));
+			}
+		});
 	}
 
+	private void getList2() {
+		CustomerDao conn = new CustomerDao();
+		CustomerAnsDto dto=new CustomerAnsDto();
+		dto.setPk_customerservice(t_target.getText());
+		try {
+			List<CustomerAnsDto> list=conn.searchAnsDetail(dto);
+			String[][] data = new String[list.size()][columns.length];
+
+			int index = 0;
+			while (index < list.size()) {
+				data[index][0] = list.get(index).getPk_customerans();
+				data[index][1] = list.get(index).getContent();
+				data[index][2] = list.get(index).getRegdate();
+				index++;
+			}
+
+			ComRecords = data;
+
+			comTable.updateUI();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 
 	private void getList() {
 		CustomerDao conn = new CustomerDao();
-
 		try {
 			java.util.List<CustomerDto> list= conn.selectAll();
 			refresh(list);
@@ -179,12 +263,18 @@ public class CustomerCenter extends Page{
 
 		int index = 0;
 		while (index < list.size()) {
-			data[index][0] = list.get(index).getPk_user();
-//			data[index][1] = list.get(index).getId();
-//			data[index][2] = list.get(index).getPass();
-//			data[index][3] = list.get(index).getName();
-//			data[index][4] = list.get(index).getPhone();
-//			data[index][5] = list.get(index).getEmail();
+			data[index][0] = list.get(index).getPk_customerservice();
+			data[index][1] = list.get(index).getTitle();
+			data[index][2] = list.get(index).getContent();
+			data[index][3] = list.get(index).getName();
+			data[index][4] = list.get(index).getRegdate();
+			if(list.get(index).getAnswered().equals("0")){
+				data[index][5] = "미 답변";
+			}else if(list.get(index).getAnswered().equals("1")){
+				data[index][5] = "답변 완료";
+			}else{
+				data[index][5] = "재 답변 요청";
+			}
 			index++;
 		}
 

@@ -144,7 +144,15 @@
                               Power_Benchmark_RPM =#{Power_Benchmark_RPM}
         where no = ${no}
     </update>
-    
+
+    <select id="selectAllCustomerservice" resultType="customer.CustomerDto">
+        Select a.pk_customerservice, b.name, a.title,a.content,a.regdate,a.answered from customerservice a, user b where a.pk_user=b.pk_user
+    </select>
+
+    <select id="searchAnsDetail" resultType="customer.CustomerAnsDto">
+        select * from customerans where pk_customerservice=#{pk_customerservice}
+    </select>
+
     
     
     

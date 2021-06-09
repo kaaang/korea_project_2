@@ -1,7 +1,7 @@
 package customer;
 
 public class CustomerDto {
-    private String pk_customerservice, pk_user,title,content,regdate,answered;
+    private String pk_customerservice, name,title,content,regdate,answered;
 
     public String getPk_customerservice() {
         return pk_customerservice;
@@ -11,12 +11,12 @@ public class CustomerDto {
         this.pk_customerservice = pk_customerservice;
     }
 
-    public String getPk_user() {
-        return pk_user;
+    public String getName() {
+        return name;
     }
 
-    public void setPk_user(String pk_user) {
-        this.pk_user = pk_user;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTitle() {

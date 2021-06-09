@@ -12,9 +12,14 @@ public class CustomerDao {
 
     public List<CustomerDto> selectAll() throws Exception {
         SqlSession sqlSession = factory.openSession();
-        List<CustomerDto> list = sqlSession.selectList("");
+        List<CustomerDto> list = sqlSession.selectList("selectAllCustomerservice");
         sqlSession.close();
-        System.out.println("존잘신혁");
+        return list;
+    }
+    public List<CustomerAnsDto> searchAnsDetail(CustomerAnsDto dto) throws Exception {
+        SqlSession sqlSession = factory.openSession();
+        List<CustomerAnsDto> list = sqlSession.selectList("searchAnsDetail",dto);
+        sqlSession.close();
         return list;
     }
 
