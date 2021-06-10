@@ -50,7 +50,7 @@
    </delete>
    
     <select id= "selectMarketSearch" resultType= "market.MarketPostDto">
-       select * from usermarket where ${category} like ${keyword}
+       select * from usermarket where ${category} like '%${keyword}%'
    </select>
 
    <!--  리뷰 -->
