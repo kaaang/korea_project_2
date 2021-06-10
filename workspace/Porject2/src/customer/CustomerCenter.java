@@ -168,8 +168,6 @@ public class CustomerCenter extends Page{
 		bt_search.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					int index= ch_category.getSelectedIndex();
-					System.out.println(index);
-					// 인덱스만 검출되고 검색이 안 됨(근데 ans에선 잘 됨.. 왜..??)
 					if (index >=0) {
 						search(index);						
 					}
@@ -223,7 +221,6 @@ public class CustomerCenter extends Page{
 		   String customerCategory;
 		   if(index==0) {
 			   // 문제의 부분
-			   System.out.println(customerDto.getPk_customerservice());
 			   customerCategory="pk_customerservice";
 		   }else if(index==1) {
 			   customerCategory="title";
