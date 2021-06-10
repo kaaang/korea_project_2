@@ -13,28 +13,37 @@ public class CompanyDao {
 	//세션(DB처리를 위한 작업단위) 열기
 	private SqlSessionFactory factory= Mybatis.getSqlSession();
 	
-	// 등록
-	public int insertCompany(CompanyDto companyDto) throws Exception{
+	public List<CompanyDto> selectAll() throws Exception{
+		
 		SqlSession sqlSession= factory.openSession();
-		int insertCompany= sqlSession.insert("companyDto", companyDto);
-		if(insertCompany>0) {
+		List<CompanyDto> list= sqlSession.selectList("selectAllCompanydetail");
+		sqlSession.close();
+        return list;
+	}
+	
+	
+	       
+	public List<CompanyDto> search(CompanyDto dto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		
+		List<CompanyDto> searchCompanydetail= sqlSession.selectList("searchCompanydetail",dto);
+		sqlSession.close();
+		return searchCompanydetail;
+
+	}
+	
+	// 삭제
+	public int deleteCompany(CompanyDto dto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		int deleteBooking= sqlSession.insert("deleteCompany", dto);
+		if(deleteBooking>0) {
 			sqlSession.commit();
 		}else {
 			sqlSession.rollback();
 		}
-		sqlSession.close();
-		return insertCompany;
-	}
-	
-	
-	
-	public List<CompanyDto> selectCompany() throws Exception{
-		
-		SqlSession sqlSession= factory.openSession();
-		//SQL문 사용
-		List<CompanyDto> CompanyList= sqlSession.selectList("selectCompanyAll");
-		sqlSession.close();
-		return CompanyList;
+		return deleteBooking;
 	}
 	
 }

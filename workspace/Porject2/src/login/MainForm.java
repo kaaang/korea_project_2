@@ -7,6 +7,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -70,7 +73,13 @@ public class MainForm extends JFrame{
 		p_center.add(join);
 		add(p_center,BorderLayout.CENTER);
 		
-		
+		login.login.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+					loginCheck();
+				}
+			}
+		});
 		
 		setSize(1400, 800);
 		setLocationRelativeTo(null);

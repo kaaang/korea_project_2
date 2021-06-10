@@ -7,6 +7,24 @@ public class CompanyDto {
 	private String introduce;
 	private int pk_company;
 	private String tel;
+	
+	private String Searchcategory;
+	private String keyword;
+	
+	
+	
+	public String getSearchcategory() {
+		return Searchcategory;
+	}
+	public void setSearchcategory(String searchcategory) {
+		Searchcategory = searchcategory;
+	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
 	public String getAddr() {
 		return addr;
 	}

@@ -77,21 +77,48 @@
 
 
    <!-- 태영 --> 
-    <insert id="BookingDao" parameterType="reservation.BookingDto">
-      insert into booking(pk_booking, pk_wanted, pk_user, pk_mybike, pk_company,book_date, price, memo, regdate) 
-       values(#{pk_booking},#{pk_wanted},#{pk_user},#{pk_mybike},#{pk_company},#{book_date},#{price},#{memo},#{regdate})
+    <insert id="insertBooking" parameterType="reservation.BookingDto">
+      insert into booking(pk_user, price, memo, book_date) 
+       values(#{pk_user},#{price},#{memo},#{book_date})
     </insert>
-    <select id="selectbookingAll" resultType="reservation.BookingDto">
-        select * from booking
+    
+
+   <delete id="deleteBooking" parameterType="reservation.BookingDto">
+      delete from booking  where pk_booking= #{pk_booking}
+   </delete>
+
+    <select id="selectAllBookingdetail" resultType="reservation.BookingDto">
+            select * from booking a, user b where a.pk_user=b.pk_user order by a.pk_booking desc      
     </select>
-    <insert id="CompanyDao" parameterType="company.CompanyDto">
-      insert into company(addr, comp_id, comp_pass, introduce, pk_company,tel) 
-       values(#{addr},#{comp_id},#{comp_pass},#{introduce},#{pk_company},#{tel})
-    </insert>
-    <select id="selectCompanyAll" resultType="company.CompanyDto">
-        select * from company
+
+    <select id="searchBookingdetail" resultType="reservation.BookingDto">
+        select * from booking where ${Searchcategory} like ${keyword}
     </select>
     
+<<<<<<< HEAD
+=======
+   <update id="updateBooking" parameterType="reservation.BookingDto">
+      update booking set price =#{price},
+                    book_date =#{book_date},
+                    memo =#{memo}
+    	where pk_booking = #{pk_booking}
+   </update> 
+   
+   
+   <delete id="deleteCompany" parameterType="company.CompanyDto">
+      delete from company  where pk_company= #{pk_company}
+   </delete>
+
+    <select id="selectAllCompanydetail" resultType="company.CompanyDto">
+            select * from company limit 50      
+    </select>
+ 
+    <select id="searchCompanydetail" resultType="company.CompanyDto">
+        select * from company where ${Searchcategory} like ${keyword}
+    </select>
+    
+
+>>>>>>> df401bd3ed7140e7d1655601799b8e4aa536dd65
 
     <!-- 석호씨 -->
    <select id="selectAllUser" resultType="user.UserDto">

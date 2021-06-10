@@ -13,29 +13,67 @@ public class BookingDao {
 	private SqlSessionFactory factory= Mybatis.getSqlSession();
 	
 	// 등록
-	public int insertReservation(BookingDto bookDto) throws Exception{
+	public int insertBooking(BookingDto bookingDto) throws Exception{
 		SqlSession sqlSession= factory.openSession();
-		int insertReservation= sqlSession.insert("bookDto", bookDto);
-		if(insertReservation>0) {
+		int insertBooking= sqlSession.insert("insertBooking", bookingDto);
+		if(insertBooking>0) {
 			sqlSession.commit();
 		}else {
 			sqlSession.rollback();
 		}
 		sqlSession.close();
-		return insertReservation;
+		return insertBooking;
 	}
 	
 	
 	
-	public List<BookingDto> selectReservation() throws Exception{
+	public List<BookingDto> selectAll() throws Exception{
 		
 		SqlSession sqlSession= factory.openSession();
-		//SQL문 사용
-		List<BookingDto> ReservationList= sqlSession.selectList("selectReservationAll");
+		List<BookingDto> list= sqlSession.selectList("selectAllBookingdetail");
 		sqlSession.close();
-		return ReservationList;
+        return list;
 	}
 	
+	
+	       
+	public List<BookingDto> search(BookingDto dto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		
+		List<BookingDto> searchBookingdetail= sqlSession.selectList("searchBookingdetail",dto);
+		sqlSession.close();
+		return searchBookingdetail;
+
+	}
+		
+	// 수정
+	
+	public int updateBooking(BookingDto bookingDto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		int updateBooking= sqlSession.insert("updateBooking", bookingDto);
+		if(updateBooking>0) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
+		}
+		return updateBooking;
+	}
+		// 삭제
+	public int deleteBooking(BookingDto bookingDto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		int deleteBooking= sqlSession.insert("deleteBooking", bookingDto);
+		if(deleteBooking>0) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
+		}
+		return deleteBooking;
+	}
+		// 검색
+		
 
 
     }

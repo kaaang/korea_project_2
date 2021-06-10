@@ -56,6 +56,7 @@ public class LoginForm extends JPanel{
 		add(login);
 		add(join);
 		
+		
 	
 		
 		
