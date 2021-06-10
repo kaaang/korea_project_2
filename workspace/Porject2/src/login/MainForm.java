@@ -121,10 +121,12 @@ public class MainForm extends JFrame{
 				MainForm.this.setVisible(false);
 			}else {
 				failLogin();
+				return;
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			failLogin();
+			return;
 		}
 	}
 	

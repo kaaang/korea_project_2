@@ -189,11 +189,6 @@ public class JoinForm extends JPanel{
 		
 		
 		join.addActionListener(new ActionListener() {
-			String db_pass = new String(t_pass.getPassword());
-			String db_name = t_name.getText();
-			String db_phone = t_phone.getText();
-			String db_email = t_email.getText();
-			String db_ymd= t_ymd.getText();
 			
 			
 			
@@ -201,12 +196,13 @@ public class JoinForm extends JPanel{
 			
 			
 			public void actionPerformed(ActionEvent e) {
+				String db_pass = new String(t_pass.getPassword());
+				String db_name = t_name.getText();
+				String db_phone = t_phone.getText();
+				String db_email = t_email.getText();
+				String db_ymd= t_ymd.getText();
+				
 				if(db_pass.equals("") || db_name.equals("") || db_phone.equals("") || db_email.equals("") || db_ymd.equals("")) {
-					System.out.println(db_pass);
-					System.out.println(db_name);
-					System.out.println(db_phone);
-					System.out.println(db_email);
-					System.out.println(db_ymd);
 					JOptionPane.showMessageDialog(main, "모든 정보를 입력해주세요");
 					return;
 				}else if(b_pass==false) {
