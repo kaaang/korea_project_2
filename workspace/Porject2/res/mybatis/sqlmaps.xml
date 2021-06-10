@@ -8,10 +8,10 @@
 
 
 
-	<!--     ksh            -->
+   <!--     ksh            -->
     <insert id="JoinDao" parameterType="login.JoinDto">
-		insert into user(id, pass, name, phone,email,birth,user_nickname) 
-    	values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
+      insert into user(id, pass, name, phone,email,birth,user_nickname) 
+       values(#{id},#{pass},#{name},#{phone},#{email},#{birth},#{user_nickname})
     </insert>
     <select id="id_check" resultType="login.LoginDto">
         select * from user WHERE id=#{id}
@@ -26,61 +26,100 @@
     
     
 
-   <!--  진아 -->
+  <!--  진아 -->
+     <!--  중고장터 -->
     <insert id="insertMarketPost" parameterType="market.MarketPostDto">
       insert into usermarket(pk_user, title, price, content, filename) 
        values(#{pk_user},#{title},#{price},#{content},#{filename})
     </insert>
     
     <select id="selectMarketPostList" resultType="market.MarketPostDto">
-        select * from usermarket order by pk_usermarket desc
-        
+      select * from usermarket a, user b where a.pk_user=b.pk_user order by a.pk_usermarket desc        
     </select>
     
-     <select id="selectMarketPostOne" resultType="util.MemberDto">
-        select pk_usermarket, pk_user, title, content, price, regdate  from usermarket WHERE pk_usermarket= #{pk_usermarket}
+     <select id="selectMarketPostOne" resultType="market.MarketReviewDto">
+        select pk_usermarket, pk_user , title, content, price, regdate  from usermarket WHERE pk_usermarket= #{pk_usermarket}
     </select>
     
-     <update id="updateMarketPost">
-      update usermarket set title = #{title}, price= #{price},content = #{content}, filename- #{filename} WHERE pk_usermarket= #{pk_usermarket}
-   </update> 
-
-   <delete id="deleteMarketPost">
+     <update id="updateMarketPost" parameterType="market.MarketPostDto">
+      update usermarket set title = #{title}, price= #{price},content = #{content}, filename= #{filename} WHERE pk_usermarket= #{pk_usermarket}
+   </update>
+   
+   <delete id="deleteMarketPost" parameterType="market.MarketPostDto">
       delete from usermarket  WHERE pk_usermarket= #{pk_usermarket}
    </delete>
    
     <select id= "selectMarketSearch" resultType= "market.MarketPostDto">
-       select * from usermarket where title like '%#{t_search}%' or content like '%#{t_search}%'
+       select * from usermarket where ${category} like ${keyword}
    </select>
 
-
-
-
-
-
-   <!-- 태영 --> 
-    <insert id="BookingDao" parameterType="reservation.BookingDto">
-      insert into booking(pk_booking, pk_wanted, pk_user, pk_mybike, pk_company,book_date, price, memo, regdate) 
-       values(#{pk_booking},#{pk_wanted},#{pk_user},#{pk_mybike},#{pk_company},#{book_date},#{price},#{memo},#{regdate})
-    </insert>
-    <select id="selectbookingAll" resultType="reservation.BookingDto">
-        select * from booking
-    </select>
-    <insert id="CompanyDao" parameterType="company.CompanyDto">
-      insert into company(addr, comp_id, comp_pass, introduce, pk_company,tel) 
-       values(#{addr},#{comp_id},#{comp_pass},#{introduce},#{pk_company},#{tel})
-    </insert>
-    <select id="selectCompanyAll" resultType="company.CompanyDto">
-        select * from company
+   <!--  리뷰 -->
+   <select id="selectReviewList" resultType="market.MarketReviewDto">
+      <!-- select * from user_review order by pk_user_review desc -->
+      select * from user_review a, usermarket b where a.pk_usermarket=b.pk_usermarket order by a.pk_user_review desc                            
     </select>
     
+     <select id="selectReviewOne" resultType="market.MarketReviewDto">
+        select pk_user_review, pk_usermarket , seller, buyer, content, rev_date, score, hide  from user_review WHERE pk_usermarket= #{pk_usermarket}
+    </select>
+
+   <delete id="deleteReview" parameterType="market.MarketReviewDto">
+      delete from user_review  WHERE pk_user_review= #{pk_user_review}
+   </delete>
+   
+    <select id= "selectReviewSearch" resultType= "market.MarketReviewDto">
+       select * from user_review where ${reviewCategory} like '%${reviewKeyword}%'
+   </select>
+   
+      <update id="updateDisplayState" parameterType="market.MarketReviewDto">
+      update user_review set hide= #{hide} WHERE pk_user_review= #{pk_user_review}
+    </update>
+
+
+
+
+
+<!-- 태영 --> 
+    <insert id="insertBooking" parameterType="reservation.BookingDto">
+      insert into booking(pk_user, price, memo, book_date) 
+       values(#{pk_user},#{price},#{memo},#{book_date})
+    </insert>
     
+
+   <delete id="deleteBooking" parameterType="reservation.BookingDto">
+      delete from booking  where pk_booking= #{pk_booking}
+   </delete>
+
+    <select id="selectAllBookingdetail" resultType="reservation.BookingDto">
+            select * from booking a, user b where a.pk_user=b.pk_user order by a.pk_booking desc      
+    </select>
+
+    <select id="searchBookingdetail" resultType="reservation.BookingDto">
+        select * from booking where ${Searchcategory} like ${keyword}
+    </select>
     
+   <update id="updateBooking" parameterType="reservation.BookingDto">
+      update booking set price =#{price},
+                    book_date =#{book_date},
+                    memo =#{memo}
+       where pk_booking = #{pk_booking}
+   </update> 
+   
+   
+   <delete id="deleteCompany" parameterType="company.CompanyDto">
+      delete from company  where pk_company= #{pk_company}
+   </delete>
+
+    <select id="selectAllCompanydetail" resultType="company.CompanyDto">
+            select * from company limit 50      
+    </select>
+ 
+    <select id="searchCompanydetail" resultType="company.CompanyDto">
+        select * from company where ${Searchcategory} like ${keyword}
+    </select>
     
-    
-    
-    
-    
+
+
     <!-- 석호씨 -->
    <select id="selectAllUser" resultType="user.UserDto">
     select * from user limit 50
@@ -145,7 +184,7 @@
         where no = ${no}
     </update>
 
-	<!-- 고객센터-->
+   <!-- 고객센터-->
     <select id="selectAllCustomerservice" resultType="customer.CustomerDto">
         Select a.pk_customerservice, b.name, a.title,a.content,a.regdate,a.answered from customerservice a, user b where a.pk_user=b.pk_user
     </select>
@@ -155,7 +194,10 @@
      <select id="searchCustomer" resultType="customer.CustomerDto">
         select * from customerservice where #{customerCategory} like '%${customerKeyword}%'
     </select>
-
+    
+    
+    
+    
     
     
     
