@@ -53,9 +53,9 @@ public class MarketPost extends Page{
    
    // 센터
    JPanel p_center;
-   JPanel p_search; // 검색 컴포넌트 올려두는 패널
-   Choice ch_category; // 검색 카테고리
-   JTextField t_keyword; // 검색어입력
+   JPanel p_search;
+   Choice ch_category;
+   JTextField t_keyword;
    JButton bt_search; 
    
    JTable table;
@@ -66,15 +66,17 @@ public class MarketPost extends Page{
    Toolkit kit= Toolkit.getDefaultToolkit();
    Image image;
    JFileChooser chooser= new JFileChooser("D:\\Workspace\\KoreaIT_project_2\\workspace\\Porject2\\res");
-   String filename; // 유저의 복사에 의해 생성된 파일명
+   String filename; 
    // 테이블
-   String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate", "filename"}; // 컬럼배열
-   String[][] records= {};// 레코드 배열
-    LoginDto user;
+   String[] columns= {"pk_usermarket", "pk_user ", "title ", "content", "price ", "regdate", "filename"}; 
+   String[][] records= {};
+   LoginDto user;
 
-   
+    AppMain main;
+    
    public MarketPost(AppMain appMain) {
       super(appMain);
+      this.main = appMain;
       this.user= appMain.getUser();
       // -----------------------------------------------[생성]
       // 서쪽 관련
@@ -117,28 +119,24 @@ public class MarketPost extends Page{
          public int getColumnCount() {
             return columns.length;
          }
-         // 컬럼 제목
          public String getColumnName(int col) {
             return columns[col];
          }
-         // 각 셀에 들어갈 데이터를 이차원 배열로부터 구함
          public Object getValueAt(int row, int col) {
             return records[row][col];
          }
-         // JTable의 각 셀의 값을 지정. 셀을 편집한 후 엔터치는 순간 아래의 메소드 호출
          public void setValueAt(Object val, int row, int col) {
             records[row][col]=(String)val; 
-            //updateMarket(); // 수정
          }
-         
          public boolean isCellEditable(int row, int col) {
-            if(col==0) { // 첫번쩨 열인 product_id만 읽기전용으로 셋팅
+            if(col==0) { 
                return false;
             }else {
                return true;
             }
          }
       });
+      
       scroll_table= new JScrollPane(table);
       // -----------------------------------------------[스타일, 레이아웃]
       // 공통크기
@@ -188,6 +186,8 @@ public class MarketPost extends Page{
           }
       };
       thread.start();
+      
+ 
       // -----------------------------------------------[리스너]
       // 이미지- 웹
       bt_web.addActionListener(new ActionListener() {
@@ -206,10 +206,9 @@ public class MarketPost extends Page{
 		public void actionPerformed(ActionEvent e) {
 			try {
 				// 유효성 체크
-				Integer.parseInt(t_price.getText());				
+				Integer.parseInt(t_price.getText());		
 				if(JOptionPane.showConfirmDialog(MarketPost.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
 					insertMarketPost();
-					selectMarketPostList();
 				}
 			}catch(NumberFormatException e1){
 				JOptionPane.showMessageDialog(MarketPost.this.getAppMain(), "가격은 숫자만 입력 가능합니다.");
@@ -262,8 +261,7 @@ public class MarketPost extends Page{
 			updateDetail();
 		}
 	});
-
-      // 생성자 호출
+      
    }
    
    // -------------------------------------------------------------------[이미지 등록]
@@ -365,11 +363,9 @@ public class MarketPost extends Page{
    // 상품 등록(사진 유/무 둘다 업로드 가능)
    public void insertMarketPost() {
 	   // id 받기
-	   
-	   
 	   MarketPostDto marketDto= new MarketPostDto();
-//	   marketDto.setPk_user(user.getPK_user);
 	   marketDto.setTitle(t_title.getText());
+	   marketDto.setPk_user(Integer.toString(main.getUser().getPk_user()));
 	   marketDto.setPrice(t_price.getText());
 	   marketDto.setContent(t_detail.getText());
 	   marketDto.setFilename(filename);
@@ -378,6 +374,7 @@ public class MarketPost extends Page{
 		   int result= marketDao.insertMarketPost(marketDto);
 		if(result>0) {
 			JOptionPane.showMessageDialog(this.getAppMain(), "등록 완료");
+			selectMarketPostList();
 		}else {
 			JOptionPane.showMessageDialog(this.getAppMain(), "등록 실패");
 		}
@@ -449,7 +446,7 @@ public class MarketPost extends Page{
        int index = 0;
        while (index < selectMarketPostList.size()) {
            data[index][0] = selectMarketPostList.get(index).getPk_usermarket();
-           data[index][1] = selectMarketPostList.get(index).getId();
+           data[index][1] = selectMarketPostList.get(index).getPk_user();
            data[index][2] = selectMarketPostList.get(index).getTitle();
            data[index][3] = selectMarketPostList.get(index).getPrice();
            data[index][4] = selectMarketPostList.get(index).getContent();
@@ -457,14 +454,11 @@ public class MarketPost extends Page{
            data[index][6] = selectMarketPostList.get(index).getFilename();
            index++;
        }
-
        records = data;
-
        table.updateUI();
    }
    // 상세	보기
    private void updateTable(){
-	   MarketPostDto marketDto= new MarketPostDto();
 	   t_title.setText((String) table.getValueAt(table.getSelectedRow(), 2));
 	   t_price.setText((String) table.getValueAt(table.getSelectedRow(), 3));
 	   t_detail.setText((String) table.getValueAt(table.getSelectedRow(), 4));
@@ -486,7 +480,6 @@ public class MarketPost extends Page{
 	   }else{
 		   category="content";
 	   }
-	   
 	   marketDto.setCategory(category);
 	   marketDto.setKeyword(t_keyword.getText());
 	   try {
@@ -496,6 +489,7 @@ public class MarketPost extends Page{
 		e.printStackTrace();
 	}
    }
+   
    // 사진 띄우기
    public void updateDetail() { 
 	   filename = (String)table.getValueAt(table.getSelectedRow(), 6);
