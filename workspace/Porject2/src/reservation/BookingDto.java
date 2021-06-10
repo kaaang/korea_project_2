@@ -11,6 +11,8 @@ public class BookingDto {
 	private int pk_wanted;
 	private String price;
 	private String regdate;
+	
+	
 	public String getBook_date() {
 		return book_date;
 	}

@@ -55,9 +55,27 @@ public class MarketPostDao {
 		}
 		return updateMarketPost;
 	}
-	// 삭제
 	
+	// 삭제
+	public int deleteMarketPost(MarketPostDto marketDto) throws Exception{
+		
+		SqlSession sqlSession= factory.openSession();
+		int deleteMarketPost= sqlSession.insert("deleteMarketPost", marketDto);
+		if(deleteMarketPost>0) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
+		}
+		return deleteMarketPost;
+	}
+
 	// 검색
+	public List<MarketPostDto> selectMarketSearch(MarketPostDto marketDto) throws Exception{
+		SqlSession sqlSession= factory.openSession();
+		List<MarketPostDto> selectMarketSearch= sqlSession.selectList("selectMarketSearch",marketDto);
+		sqlSession.close();
+		return selectMarketSearch;
+	}
 	
 
 }
