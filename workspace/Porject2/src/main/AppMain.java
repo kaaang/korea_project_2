@@ -80,7 +80,7 @@ public class AppMain extends JFrame implements ActionListener{
 			sub_btn[i].setSub_id(i);
 			p_sub.add(sub_btn[i]);
 		}
-		
+		//세상에 머지가 이렇게 힘들줄이야
 		
 		
 		
