@@ -73,7 +73,7 @@ public class MainForm extends JFrame{
 		p_center.add(join);
 		add(p_center,BorderLayout.CENTER);
 		
-		login.login.addKeyListener(new KeyAdapter() {
+		this.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode()==KeyEvent.VK_ENTER) {
 					loginCheck();
