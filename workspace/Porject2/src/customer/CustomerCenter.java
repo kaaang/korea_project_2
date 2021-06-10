@@ -181,6 +181,7 @@ public class CustomerCenter extends Page{
 					appMain.pages[11].setVisible(false);
 					appMain.subCustomer.setVisible(true);
 					appMain.subCustomer.getList2();
+					//섹시신혁
 				}
 			}
 		});
