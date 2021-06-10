@@ -58,38 +58,45 @@
 
    <!-- 태영 --> 
     <insert id="insertBooking" parameterType="reservation.BookingDto">
-      insert into booking(pk_user,pk_mybike,price,pk_wanted,memo) 
-       values(${pk_user},${pk_mybike},#{price},${pk_wanted},#{memo})
+      insert into booking(pk_user, price, memo, book_date) 
+       values(#{pk_user},#{price},#{memo},#{book_date})
     </insert>
     
-    <select id="selectBookingList" resultType="reservation.BookingDto">
-        select * from booking order by pk_booking desc
-        
-    </select>
-    
-     <select id="selectBookingOne" resultType="util.MemberDto">
-        select pk_user, pk_mybike, price, pk_wanted, memo  from booking WHERE pk_booking= #{pk_booking}
-    </select>
-    
-     <update id="updateBooking">
-      update booking set pk_user = #{pk_user}, pk_mybike= #{pk_mybike},price = #{price}, pk_wanted- #{pk_wanted}, memo- #{memo} WHERE pk_booking= #{pk_booking}
-   </update> 
 
-   <delete id="deleteBooking">
-      delete from booking  WHERE pk_booking= #{pk_booking}
+   <delete id="deleteBooking" parameterType="reservation.BookingDto">
+      delete from booking  where pk_booking= #{pk_booking}
    </delete>
+
+    <select id="selectAllBookingdetail" resultType="reservation.BookingDto">
+            select * from booking a, user b where a.pk_user=b.pk_user order by a.pk_booking desc      
+    </select>
+
+    <select id="searchBookingdetail" resultType="reservation.BookingDto">
+        select * from booking where ${Searchcategory} like ${keyword}
+    </select>
+    
+   <update id="updateBooking" parameterType="reservation.BookingDto">
+      update booking set price =#{price},
+                    book_date =#{book_date},
+                    memo =#{memo}
+    	where pk_booking = #{pk_booking}
+   </update> 
    
-    <select id= "selectBookingSearch" resultType= "reservation.BookingDto">
-       select * from booking where pk_user like '%#{t_search}%' or memo like '%#{t_search}%'
-   </select>
+   
+   <delete id="deleteCompany" parameterType="company.CompanyDto">
+      delete from company  where pk_company= #{pk_company}
+   </delete>
+
+    <select id="selectAllCompanydetail" resultType="company.CompanyDto">
+            select * from company limit 50      
+    </select>
+ 
+    <select id="searchCompanydetail" resultType="company.CompanyDto">
+        select * from company where ${Searchcategory} like ${keyword}
+    </select>
     
-    
-    
-    
-    
-    
-    
-    
+
+
     <!-- 석호씨 -->
    <select id="selectAllUser" resultType="user.UserDto">
     select * from user limit 50
