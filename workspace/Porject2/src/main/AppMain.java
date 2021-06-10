@@ -14,6 +14,7 @@ import bike.Bike;
 import company.CompanyMain;
 import customer.CustomerCenter;
 import customer.CustomerCenterAns;
+import login.LoginDto;
 import market.MarketLog;
 import market.MarketPost;
 import market.MarketReview;
@@ -44,6 +45,8 @@ public class AppMain extends JFrame implements ActionListener{
 	
 	public Page[] pages = new Page[12];
 	public CustomerCenterAns subCustomer;
+	private LoginDto user = new LoginDto();
+	
 	
 	public AppMain() {
 		p_west = new JPanel();
@@ -169,6 +172,15 @@ public class AppMain extends JFrame implements ActionListener{
 			}
 		}
 	}
+
+	public LoginDto getUser() {
+		return user;
+	}
+
+	public void setUser(LoginDto user) {
+		this.user = user;
+	}
+	
 	
 	
 

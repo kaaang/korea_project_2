@@ -198,8 +198,15 @@ public class JoinForm extends JPanel{
 			
 			
 			
+			
+			
 			public void actionPerformed(ActionEvent e) {
 				if(db_pass.equals("") || db_name.equals("") || db_phone.equals("") || db_email.equals("") || db_ymd.equals("")) {
+					System.out.println(db_pass);
+					System.out.println(db_name);
+					System.out.println(db_phone);
+					System.out.println(db_email);
+					System.out.println(db_ymd);
 					JOptionPane.showMessageDialog(main, "모든 정보를 입력해주세요");
 					return;
 				}else if(b_pass==false) {
