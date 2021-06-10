@@ -30,12 +30,13 @@ public class CustomerDao {
         sqlSession.close();
         return result;
     }
-    public List<CustomerDto> search(CustomerDto dto) throws Exception{
-        SqlSession sqlSession = factory.openSession();
+    
+	public List<CustomerDto> searchCustomer(CustomerDto Customerdto) throws Exception{
+		SqlSession sqlSession= factory.openSession();
+		List<CustomerDto> searchCustomer= sqlSession.selectList("searchCustomer",Customerdto);
+		sqlSession.close();
+		return searchCustomer;
+	}
 
-        List<CustomerDto> bikeDtoList=sqlSession.selectList("searchUser", dto);
-        sqlSession.close();
-        return bikeDtoList;
-    }
 
 }

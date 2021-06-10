@@ -145,17 +145,17 @@
         where no = ${no}
     </update>
 
+	<!-- 고객센터-->
     <select id="selectAllCustomerservice" resultType="customer.CustomerDto">
         Select a.pk_customerservice, b.name, a.title,a.content,a.regdate,a.answered from customerservice a, user b where a.pk_user=b.pk_user
     </select>
-
     <select id="searchAnsDetail" resultType="customer.CustomerAnsDto">
         select * from customerans where pk_customerservice=#{pk_customerservice}
     </select>
+     <select id="searchCustomer" resultType="customer.CustomerDto">
+        select * from customerservice where #{customerCategory} like '%${customerKeyword}%'
+    </select>
 
-    
-    
-    
     
     
     

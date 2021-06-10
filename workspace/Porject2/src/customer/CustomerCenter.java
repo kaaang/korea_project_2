@@ -38,7 +38,7 @@ public class CustomerCenter extends Page{
 
 	Thread thread;
 
-	String[] columns = {"no", "제목", "내용", "유저명", "등록일", "답변여부"};
+	String[] columns = {"no", "title", "content", "pk_user", "regdate", "answered"};
 	String[][] records = {};
 
 	String[] ComColumns = {"no", "제목", "내용", "등록일"};
@@ -47,7 +47,6 @@ public class CustomerCenter extends Page{
 	public CustomerCenter(AppMain appMain) {
 		super(appMain);
 		this.appMain=appMain;
-
 
 		p_west = new JPanel();
 		p_east = new JPanel();
@@ -167,9 +166,13 @@ public class CustomerCenter extends Page{
 
 		//이벤트리스너
 		bt_search.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
-				search();
+					int index= ch_category.getSelectedIndex();
+					System.out.println(index);
+					// 인덱스만 검출되고 검색이 안 됨(근데 ans에선 잘 됨.. 왜..??)
+					if (index >=0) {
+						search(index);						
+					}
 			}
 		});
 		bt_viewAns.addActionListener(new ActionListener() {
@@ -181,7 +184,7 @@ public class CustomerCenter extends Page{
 					appMain.pages[11].setVisible(false);
 					appMain.subCustomer.setVisible(true);
 					appMain.subCustomer.getList2();
-					//섹시신혁
+					appMain.subCustomer.t_ans.setText(t_ans.getText());
 				}
 			}
 		});
@@ -214,8 +217,35 @@ public class CustomerCenter extends Page{
 		}
 	}
 
-	private void search() {
-	}
+	private void search(int index) {
+			CustomerDao customerDao= new CustomerDao();
+			CustomerDto customerDto= new CustomerDto();
+		   String customerCategory;
+		   if(index==0) {
+			   // 문제의 부분
+			   System.out.println(customerDto.getPk_customerservice());
+			   customerCategory="pk_customerservice";
+		   }else if(index==1) {
+			   customerCategory="title";
+		   }else if(index==2) {
+			   customerCategory="content";
+		   }else if(index==3) {
+			   customerCategory="pk_user";
+		   }else if(index==4) {
+			   customerCategory="regdate";
+		   }else {
+			   customerCategory="answered";
+		   }
+		   
+		   customerDto.setCustomerCategory(customerCategory);
+		   customerDto.setCustomerKeyword(t_keyword.getText());
+		   try {
+			List<CustomerDto> searchCustomer= customerDao.searchCustomer(customerDto);
+			refresh(searchCustomer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	   }
 
 	private void refresh(List<CustomerDto> list){
 		String[][] data = new String[list.size()][columns.length];

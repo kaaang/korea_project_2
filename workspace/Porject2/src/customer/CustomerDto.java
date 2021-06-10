@@ -2,6 +2,7 @@ package customer;
 
 public class CustomerDto {
     private String pk_customerservice, name,title,content,regdate,answered;
+    private String customerCategory, customerKeyword;
 
     public String getPk_customerservice() {
         return pk_customerservice;
@@ -50,4 +51,23 @@ public class CustomerDto {
     public void setAnswered(String answered) {
         this.answered = answered;
     }
+    //	 검색
+	public String getCustomerCategory() {
+		return customerCategory;
+	}
+
+	public void setCustomerCategory(String customerCategory) {
+		this.customerCategory = customerCategory;
+	}
+
+	public String getCustomerKeyword() {
+		return customerKeyword;
+	}
+
+	public void setCustomerKeyword(String customerKeyword) {
+		this.customerKeyword = customerKeyword;
+	}
+    
+    
+    
 }

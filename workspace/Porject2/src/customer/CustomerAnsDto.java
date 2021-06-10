@@ -2,7 +2,7 @@ package customer;
 
 public class CustomerAnsDto {
     private String pk_customerans,pk_customerservice,pk_admin,content,regdate;
-
+    
     public String getPk_customerans() {
         return pk_customerans;
     }
@@ -42,4 +42,5 @@ public class CustomerAnsDto {
     public void setRegdate(String regdate) {
         this.regdate = regdate;
     }
+    
 }

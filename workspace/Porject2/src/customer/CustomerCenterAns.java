@@ -38,7 +38,7 @@ public class CustomerCenterAns extends Page{
 
 	Thread thread;
 
-	String[] columns = {"no", "제목", "내용", "유저명", "등록일", "답변여부"};
+	String[] columns = {"no", "title", "content", "pk_user", "regdate", "answered"};
 
 	String[] ComColumns = {"no", "내용", "등록일"};
 	String[][] ComRecords = {};
@@ -49,7 +49,6 @@ public class CustomerCenterAns extends Page{
 
 	public CustomerCenterAns(AppMain appMain) {
 		super(appMain);
-
 		CustomerCenter customerCenter = null;
 		p_west = new JPanel();
 		p_east = new JPanel();
@@ -169,9 +168,13 @@ public class CustomerCenterAns extends Page{
 		bt_search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				search();
+				appMain.pages[11].setVisible(true);
+				appMain.subCustomer.setVisible(false);
+				CustomerCenter ct= (CustomerCenter)appMain.pages[11];
+				ct.t_keyword.setText(t_keyword.getText());
 			}
 		});
+		
 		bt_viewAns.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -187,8 +190,8 @@ public class CustomerCenterAns extends Page{
 			public void actionPerformed(ActionEvent e) {
 				appMain.pages[11].setVisible(true);
 				appMain.subCustomer.setVisible(false);
-				CustomerCenter ct=(CustomerCenter)appMain.pages[11];
-				ct.t_target.setText("볶음신혁 존맛 ");
+				CustomerCenter ct= (CustomerCenter)appMain.pages[11];
+				ct.t_ans.setText(t_ans.getText());
 			}
 		});
 	}
@@ -215,9 +218,6 @@ public class CustomerCenterAns extends Page{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	private void search() {
-
 	}
 
 }
