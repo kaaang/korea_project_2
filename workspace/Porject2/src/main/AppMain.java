@@ -69,6 +69,7 @@ public class AppMain extends JFrame implements ActionListener{
 		pages[10] = new CompanyMain(this);
 		pages[11] = new CustomerCenter(this);
 		subCustomer=new CustomerCenterAns(this);
+
 		
 		
 		for(int i=0;i<sub_string.length ;i++) {
