@@ -49,17 +49,15 @@ public class CompanyMain extends Page{
 	   JTextField tel; 
 	   JTextField addr; 
 	   JTextField introduce; 
-
 	   Thread thread;
 
-	   JButton bt_del;
-	   
 	   // 센터
 	   JPanel p_center; 
 	   JPanel p_search; 
 	   Choice ch_category; 
 	   JTextField t_keyword; 
 	   JButton bt_search; 
+	   JButton bt_del;
 	   
 	   JTable table;
 	   JScrollPane scroll_table;
@@ -81,13 +79,9 @@ public class CompanyMain extends Page{
 	      addr= new JTextField();
 	      introduce= new  JTextField();
 	      
-	      
-	      
-	      
 	      // 센터
 	      p_center= new JPanel();
 	      p_search= new JPanel();
-	      
 	      ch_category= new Choice();
 	      
 	      // 검색 카테고리 등록
@@ -131,33 +125,28 @@ public class CompanyMain extends Page{
 	            }
 	         }
 	      });
-	      
-	      scroll_table= new JScrollPane(table);
+	      scroll_table= new JScrollPane(table);	      
 	      // -----------------------------------------------[스타일, 레이아웃]
 	      // 공통크기
 	      Dimension d= new Dimension(180, 30); 
 	      setLayout(new BorderLayout());
 	      
-	      // 서쪽
-	      p_west.setPreferredSize(new Dimension(200, 700));
-	      
 	      // 센터
 	      p_center.setLayout(new BorderLayout());
+	      bt_search.setPreferredSize(new Dimension(100,30));
+	      bt_del.setPreferredSize(new Dimension(100,30));
 	      ch_category.setPreferredSize(d);
 	      t_keyword.setPreferredSize(new Dimension(450, 30));
 	      
 	      // -----------------------------------------------[조립]
-	      
-	      
 	      // 센터
 	      p_search.add(ch_category);
 	      p_search.add(t_keyword);
 	      p_search.add(bt_search);
-	      p_center.add(bt_del);
+	      p_search.add(bt_del);
 	      p_center.add(p_search, BorderLayout.NORTH);
 	      p_center.add(scroll_table);
 	      add(p_center);
-	      
 	      
 	      thread = new Thread() {
 	          @Override
@@ -173,7 +162,6 @@ public class CompanyMain extends Page{
 				updateTable();
 			}
 		});
-	     
 	     
       // 삭제
       bt_del.addActionListener(new ActionListener() {
@@ -199,9 +187,7 @@ public class CompanyMain extends Page{
          	
          }
       });
-      
 	   }
-	   
 	   
 	   // 삭제
 	   public void delete() {
@@ -220,11 +206,8 @@ public class CompanyMain extends Page{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	   }
 
-	   
-	   
 	   public void search(int index) {
 		   CompanyDto Dto= new CompanyDto();
 		   CompanyDao Dao= new CompanyDao();
@@ -240,12 +223,9 @@ public class CompanyMain extends Page{
 				searchcategory="addr";
 			}else{
 				searchcategory="introduce";
-			}
-	    			   
+			}	   
 	       Dto.setSearchcategory(ch_category.getSelectedItem());
 	       Dto.setKeyword(t_keyword.getText());
-
-	      
 	       try {
 	           List<CompanyDto> searchCompanydetail = Dao.search(Dto);
 	           refresh(searchCompanydetail);
@@ -253,9 +233,6 @@ public class CompanyMain extends Page{
 	           e.printStackTrace();
 	       }
 	   }
-
-	  
-	   
 	   public void getList() {
 	       CompanyDao conn = new CompanyDao();
 	       try {
@@ -264,16 +241,9 @@ public class CompanyMain extends Page{
 	       } catch (Exception e) {
 	           e.printStackTrace();
 	       }
-
 	   }
-	   
-	   
-	   
-	   
 	   public void refresh(List<CompanyDto> getList) {
-		   
 		   String[][]data = new String[getList.size()][columns.length];
-		   
 		   int index = 0;
 		   while(index < getList.size()) {
 			   data[index][0] = Integer.toString(getList.get(index).getPk_company());
@@ -284,13 +254,10 @@ public class CompanyMain extends Page{
 			   data[index][5] = getList.get(index).getIntroduce();
 			   index++;
 		   }
-		   
 		   records = data;
-		   
 		   table.updateUI();
 	   }
-	   
-	   
+
 	   // 상세	보기
 	   private void updateTable(){
 		   CompanyDto dto= new CompanyDto();
@@ -299,10 +266,5 @@ public class CompanyMain extends Page{
 		   tel.setText((String) table.getValueAt(table.getSelectedRow(), 3));
 		   addr.setText((String) table.getValueAt(table.getSelectedRow(), 4));
 		   introduce.setText((String) table.getValueAt(table.getSelectedRow(), 5));
-		   
-
 	  }
-	   
   }
-
-	   

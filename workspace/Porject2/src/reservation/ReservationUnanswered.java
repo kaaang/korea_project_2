@@ -49,7 +49,7 @@ public class ReservationUnanswered extends Page {
    
    JTable table;
    JScrollPane scroll_table;
-   String filename; // 유저의 복사에 의해 생성된 파일명
+   
    // 테이블
    String[] columns= {"pk_booking","user","regdate", "price", "memo", "book_date"}; // 컬럼배열
    String[][] records= {};// 레코드 배열
@@ -71,10 +71,8 @@ public class ReservationUnanswered extends Page {
       scroll= new  JScrollPane(t_memo);
       w_scroll = new  JScrollPane(book_date);
 
-      
       bt_edit= new JButton("답변 수정");
       bt_del= new JButton("답변 삭제");
-      
       
       // 센터
       p_center= new JPanel();
@@ -89,7 +87,6 @@ public class ReservationUnanswered extends Page {
       ch_category.add("memo");
       ch_category.add("book_date");
      
-      
       t_keyword= new JTextField();
       bt_search= new JButton("검색");
       
@@ -165,8 +162,7 @@ public class ReservationUnanswered extends Page {
       p_center.add(p_search, BorderLayout.NORTH);
       p_center.add(scroll_table);
       add(p_center);
-      
-      
+
       thread = new Thread() {
           @Override
           public void run() {
@@ -174,9 +170,6 @@ public class ReservationUnanswered extends Page {
           }
       };
       thread.start();
-      
-      
-      
       // -----------------------------------------------[리스너]
       // 테이블 연결
       table.addMouseListener(new MouseAdapter() {
@@ -184,8 +177,8 @@ public class ReservationUnanswered extends Page {
 			updateTable();
 		}
 	});
-    // 등록
       
+    // 등록
      bt_regist.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
     	  try {
@@ -194,12 +187,10 @@ public class ReservationUnanswered extends Page {
 				if(JOptionPane.showConfirmDialog(ReservationUnanswered.this.getAppMain(), "등록 하시겠습니까?")== JOptionPane.OK_OPTION){
 					insertBookingPost();
 					getList();
-
 				}
 			}catch(NumberFormatException e1){
 				
 			}
-
       }
    });
      
@@ -212,13 +203,14 @@ public class ReservationUnanswered extends Page {
  			}
  		}
  	});
+     
      // 삭제
      bt_del.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
-	  			if(JOptionPane.showConfirmDialog(ReservationUnanswered.this.getAppMain(), "삭제 하시겠습니까?")== JOptionPane.OK_OPTION){
-					delete();
-					getList();
-	  			}
+  			if(JOptionPane.showConfirmDialog(ReservationUnanswered.this.getAppMain(), "삭제 하시겠습니까?")== JOptionPane.OK_OPTION){
+				delete();
+				getList();
+  			}
    		}
    	});
      
@@ -236,14 +228,8 @@ public class ReservationUnanswered extends Page {
         	
         }
      });
-
-     
-
    }
- 
-   
- 
-   
+
    // 상품 등록
    public void insertBookingPost() {
 	   BookingDto bookingDto= new BookingDto();
@@ -286,7 +272,6 @@ public class ReservationUnanswered extends Page {
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-	
    }
    
    
@@ -298,8 +283,6 @@ public class ReservationUnanswered extends Page {
 	   t_price.setText((String) table.getValueAt(table.getSelectedRow(), 3));
 	   t_memo.setText((String) table.getValueAt(table.getSelectedRow(), 4));
 	   book_date.setText((String) table.getValueAt(table.getSelectedRow(), 5));
-	   
-
   }
    
    public void updateBooking() {
@@ -311,8 +294,7 @@ public class ReservationUnanswered extends Page {
 	  dto.setMemo(t_memo.getText());
 	  dto.setBook_date(book_date.getText());
 	  BookingDao conn= new BookingDao();
-	  
-	  
+
 	  System.out.println(dto.getPk_booking());
 	  System.out.println(dto.getPk_user());
 	  System.out.println(dto.getRegdate());
@@ -332,11 +314,6 @@ public class ReservationUnanswered extends Page {
 		}
    }
    
-
-   // 테이블 눌렀을때 시스아웃으로 원하는 데이터 나오느지 
-   // 확인하고 dto에 값을 집어놓고 dao에서 실행
-   // 쿼리문 잘날아가는지 
-   
    public void search(int index) {
        BookingDao bookingDao=new BookingDao();
 
@@ -353,12 +330,10 @@ public class ReservationUnanswered extends Page {
 			searchcategory="memo";
 		}else{
 			searchcategory="book_date";
-		}
-    			   
+		}	   
        bookinghDto.setSearchcategory(ch_category.getSelectedItem());
        bookinghDto.setKeyword(t_keyword.getText());
 
-      
        try {
            List<BookingDto> searchBookingdetail = bookingDao.search(bookinghDto);
            refresh(searchBookingdetail);
@@ -366,9 +341,7 @@ public class ReservationUnanswered extends Page {
            e.printStackTrace();
        }
    }
-   
-   
-   
+
    public void getList() {
        BookingDao conn = new BookingDao();
        try {
@@ -377,13 +350,9 @@ public class ReservationUnanswered extends Page {
        } catch (Exception e) {
            e.printStackTrace();
        }
-
    }
-   
-   
-   
+
    public void refresh(List<BookingDto> getList) {
-	   
 	   String[][]data = new String[getList.size()][columns.length];
 	   
 	   int index = 0;
@@ -396,18 +365,9 @@ public class ReservationUnanswered extends Page {
 		   data[index][5] = getList.get(index).getBook_date();
 		   index++;
 	   }
-	   
 	   records = data;
-	   
 	   table.updateUI();
    }
-
-   
   }
-
-
-
-
-
 
 
