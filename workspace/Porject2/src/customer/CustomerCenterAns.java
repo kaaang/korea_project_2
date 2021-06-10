@@ -12,9 +12,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class CustomerCenter extends Page{
-	AppMain appMain;
-	CustomerCenterAns customerCenterAns;
+public class CustomerCenterAns extends Page{
+	CustomerCenter customerCenter;
+
+
+
 	JPanel p_west,p_east;
 	JPanel p_south,p_south_left,p_south_center,p_south_right;
 
@@ -31,23 +33,23 @@ public class CustomerCenter extends Page{
 	JTextArea t_ans;
 	JButton bt_sendAns;
 
-	JTable table;
 	JTable comTable;
-	JScrollPane scroll_table;
 	JScrollPane comScroll_table;
 
 	Thread thread;
 
 	String[] columns = {"no", "title", "content", "pk_user", "regdate", "answered"};
-	String[][] records = {};
 
-	String[] ComColumns = {"no", "제목", "내용", "등록일"};
+	String[] ComColumns = {"no", "내용", "등록일"};
 	String[][] ComRecords = {};
 
-	public CustomerCenter(AppMain appMain) {
-		super(appMain);
-		this.appMain=appMain;
+	public void setCustomerCenter(CustomerCenter customerCenter) {
+		this.customerCenter = customerCenter;
+	}
 
+	public CustomerCenterAns(AppMain appMain) {
+		super(appMain);
+		CustomerCenter customerCenter = null;
 		p_west = new JPanel();
 		p_east = new JPanel();
 		p_center = new JPanel();
@@ -58,7 +60,7 @@ public class CustomerCenter extends Page{
 		p_south_left=new JPanel();
 		p_south_center=new JPanel();
 		p_south_right=new JPanel();
-		t_target=new JTextField();
+		t_target= new JTextField();
 		bt_rollbackTable=new JButton("질문목록");
 		bt_viewAns=new JButton("답변목록");
 		t_ans=new JTextArea();
@@ -74,25 +76,25 @@ public class CustomerCenter extends Page{
 		t_keyword = new JTextField();
 		bt_search = new JButton("검색");
 
-		table = new JTable(new AbstractTableModel() {
+		comTable = new JTable(new AbstractTableModel() {
 			public int getRowCount() {
-				return records.length;
+				return ComRecords.length;
 			}
 
 			public int getColumnCount() {
-				return columns.length;
+				return ComColumns.length;
 			}
 
 			public String getColumnName(int col) {
-				return columns[col];
+				return ComColumns[col];
 			}
 
 			public Object getValueAt(int row, int col) {
-				return records[row][col];
+				return ComRecords[row][col];
 			}
 
 			public void setValueAt(Object val, int row, int col) {
-				records[row][col] = (String) val;
+				ComRecords[row][col] = (String) val;
 			}
 
 			public boolean isCellEditable(int row, int col) {
@@ -104,8 +106,6 @@ public class CustomerCenter extends Page{
 			}
 		});
 
-
-		scroll_table = new JScrollPane(table);
 		comScroll_table = new JScrollPane(comTable);
 
 
@@ -152,13 +152,13 @@ public class CustomerCenter extends Page{
 		p_search.add(t_keyword);
 		p_search.add(bt_search);
 		p_center.add(p_search, BorderLayout.NORTH);
-		p_center.add(scroll_table);
+		p_center.add(comScroll_table);
 		add(p_center);
 
 		thread = new Thread() {
 			@Override
 			public void run() {
-				getList();
+//				getList2();
 			}
 		};
 		thread.start();
@@ -166,24 +166,23 @@ public class CustomerCenter extends Page{
 
 		//이벤트리스너
 		bt_search.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-					int index= ch_category.getSelectedIndex();
-					if (index >=0) {
-						search(index);						
-					}
+				appMain.pages[11].setVisible(true);
+				appMain.subCustomer.setVisible(false);
+				CustomerCenter ct= (CustomerCenter)appMain.pages[11];
+				ct.t_keyword.setText(t_keyword.getText());
 			}
 		});
+		
 		bt_viewAns.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (t_target.getText().equals("섹-시한 강신혁")) {
-					JOptionPane.showMessageDialog(appMain,"조회할 문의를 선택하세요");
-				}else {
-					appMain.pages[11].setVisible(false);
-					appMain.subCustomer.setVisible(true);
-					appMain.subCustomer.getList2();
-					appMain.subCustomer.t_ans.setText(t_ans.getText());
-				}
+				appMain.pages[11].setVisible(false);
+				appMain.subCustomer.setVisible(true);
+				
+				getList2();
+
 			}
 		});
 		bt_rollbackTable.addActionListener(new ActionListener() {
@@ -191,81 +190,34 @@ public class CustomerCenter extends Page{
 			public void actionPerformed(ActionEvent e) {
 				appMain.pages[11].setVisible(true);
 				appMain.subCustomer.setVisible(false);
-			}
-		});
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				t_target.setText((String) table.getValueAt(table.getSelectedRow(), 0));
-				appMain.subCustomer.t_target.setText((String) table.getValueAt(table.getSelectedRow(), 0));
+				CustomerCenter ct= (CustomerCenter)appMain.pages[11];
+				ct.t_ans.setText(t_ans.getText());
 			}
 		});
 	}
 
-	private CustomerCenter getCustomerCenter(){
-		return this;
-	}
-	private void getList() {
+	public void getList2() {
 		CustomerDao conn = new CustomerDao();
+		CustomerAnsDto dto=new CustomerAnsDto();
+		dto.setPk_customerservice(t_target.getText());
 		try {
-			java.util.List<CustomerDto> list= conn.selectAll();
-			refresh(list);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+			List<CustomerAnsDto> list=conn.searchAnsDetail(dto);
+			String[][] data = new String[list.size()][columns.length];
 
-	private void search(int index) {
-			CustomerDao customerDao= new CustomerDao();
-			CustomerDto customerDto= new CustomerDto();
-		   String customerCategory;
-		   if(index==0) {
-			   // 문제의 부분
-			   customerCategory="pk_customerservice";
-		   }else if(index==1) {
-			   customerCategory="title";
-		   }else if(index==2) {
-			   customerCategory="content";
-		   }else if(index==3) {
-			   customerCategory="pk_user";
-		   }else if(index==4) {
-			   customerCategory="regdate";
-		   }else {
-			   customerCategory="answered";
-		   }
-		   
-		   customerDto.setCustomerCategory(customerCategory);
-		   customerDto.setCustomerKeyword(t_keyword.getText());
-		   try {
-			List<CustomerDto> searchCustomer= customerDao.searchCustomer(customerDto);
-			refresh(searchCustomer);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	   }
-
-	private void refresh(List<CustomerDto> list){
-		String[][] data = new String[list.size()][columns.length];
-
-		int index = 0;
-		while (index < list.size()) {
-			data[index][0] = list.get(index).getPk_customerservice();
-			data[index][1] = list.get(index).getTitle();
-			data[index][2] = list.get(index).getContent();
-			data[index][3] = list.get(index).getName();
-			data[index][4] = list.get(index).getRegdate();
-			if(list.get(index).getAnswered().equals("0")){
-				data[index][5] = "미 답변";
-			}else if(list.get(index).getAnswered().equals("1")){
-				data[index][5] = "답변 완료";
-			}else{
-				data[index][5] = "재 답변 요청";
+			int index = 0;
+			while (index < list.size()) {
+				data[index][0] = list.get(index).getPk_customerans();
+				data[index][1] = list.get(index).getContent();
+				data[index][2] = list.get(index).getRegdate();
+				index++;
 			}
-			index++;
+
+			ComRecords = data;
+
+			comTable.updateUI();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		records = data;
-
-		table.updateUI();
 	}
+
 }
