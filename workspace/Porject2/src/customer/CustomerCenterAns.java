@@ -177,6 +177,7 @@ public class CustomerCenterAns extends Page{
 			public void actionPerformed(ActionEvent e) {
 				appMain.pages[11].setVisible(false);
 				appMain.subCustomer.setVisible(true);
+				
 				getList2();
 
 			}
@@ -186,6 +187,8 @@ public class CustomerCenterAns extends Page{
 			public void actionPerformed(ActionEvent e) {
 				appMain.pages[11].setVisible(true);
 				appMain.subCustomer.setVisible(false);
+				CustomerCenter ct=(CustomerCenter)appMain.pages[11];
+				ct.t_target.setText("볶음신혁 존맛 ");
 			}
 		});
 	}
